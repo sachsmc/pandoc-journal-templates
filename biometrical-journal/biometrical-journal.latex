@@ -1,0 +1,62 @@
+\documentclass[bimj,fleqn]{w-art}
+\usepackage{times}
+\usepackage{w-thm}
+\usepackage[authoryear]{natbib}
+\setlength{\bibsep}{2pt}
+\setlength{\bibhang}{2em}
+
+\usepackage[]{graphicx}
+\usepackage{tikz}
+\chardef\bslash=`\\ % p. 424, TeXbook
+\let\fn\pkg
+\let\env\pkg
+\let\opt\pkg
+\hfuzz1pc % Don't bother to report overfull boxes if overage is < 1pc
+\newcommand{\envert}[1]{\left\lvert#1\right\rvert}
+\let\abs=\envert
+
+\begin{document}
+\DOIsuffix{bimj.DOIsuffix}
+\Volume{00}
+\Issue{00}
+\Year{$year$}
+\pagespan{1}{}
+\keywords{$keywords$\\[1pc]
+\noindent\hspace*{-4.2pc} Supporting Information for this article is available from the author or on the WWW under\break \hspace*{-4pc} \underline{http://dx.doi.org/10.1022/bimj.XXXXXXX}} %%% semicolon and fullpoint added here for keyword style
+
+\title[$header$]{$title$}
+%% Information for the first author.
+\author[$authabbr$]{$leadauth$\footnote{Corresponding author: {\sf{e-mail: $email$}}, Phone: $phone$, Fax: $fax$}\inst{$firstinst$}} 
+$if(authors)$
+$for(authors)$
+\author[$authors.abbr$]{$authors.name$\inst{$authors.inst$}}$sep$ 
+$endfor$
+$endif$
+
+$for(affiliation)$
+\address[\inst{$affiliation.key$}]{$affiliation.name$}$sep$ 
+$endfor$
+
+\Receiveddate{zzz} \Reviseddate{zzz} \Accepteddate{zzz} 
+
+\begin{abstract}
+$abstract$
+\end{abstract}
+
+
+
+%% maketitle must follow the abstract.
+\maketitle                   % Produces the title.
+
+
+$body$
+
+
+$if(natbib)$
+\bibliographystyle{biometrical}
+\bibliography{$bibliography$}
+$endif$
+
+\newpage
+\phantom{aaaa}
+\end{document}

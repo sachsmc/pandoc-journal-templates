@@ -1,0 +1,103 @@
+---
+title: Pandoc templates for common statistics journals
+leadauth: Michael C. Sachs
+email: michael.sachs@nih.gov
+phone: 555-5555
+fax: 555-5555
+firstinst: a,b
+authors:
+- name: Homer J. Simpson
+  abbr: H.J. Simpson
+  inst: b
+  email: ChunkyLover53@aol.com
+affiliation:
+- name: National Cancer Institute, Bethesda, MD
+  key: a
+- name: Moe's Tavern, Springfield, USA
+  key: b
+authabbr: M.C. Sachs
+date: October 2014
+year: 2014
+abstract: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce non ex metus. Etiam tempor nisl at lorem facilisis, vel malesuada est mollis. Pellentesque nunc lacus, porttitor in mollis quis, pellentesque quis sem. Nunc consequat, elit vel tincidunt tincidunt, urna arcu efficitur turpis, ac mollis turpis velit vitae libero. Aenean mauris lacus, blandit a nulla a, scelerisque lobortis dolor. Etiam viverra, nibh vehicula vehicula congue, nisl dui mattis risus, quis convallis massa nisi quis elit. Maecenas gravida nunc nec dignissim consequat. Fusce scelerisque magna ut odio ullamcorper dapibus. Vivamus et dignissim nunc.'
+keywords: In hac; habitasse; platea; dictumst
+bibliography: example
+...
+
+Introduction
+===============
+Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed porttitor massa vestibulum iaculis cursus. Donec sapien lorem, lobortis non gravida eu, ullamcorper sed sem. Curabitur nec posuere lacus. Curabitur finibus, orci in malesuada lacinia, lorem justo maximus risus, vitae mattis turpis elit at dolor. Vestibulum nec metus felis. Phasellus maximus ipsum sit amet dui egestas, at viverra ligula placerat. Phasellus vitae est et velit elementum fermentum vel ut risus. Pellentesque odio tortor, vestibulum non laoreet nec, gravida pretium felis. Nullam maximus tempus dapibus. Mauris nec iaculis orci. Integer congue, quam ac venenatis cursus, risus nunc convallis nunc, eget consequat arcu lorem porttitor nisl. [@heagerty2000time; @pepe2003statistical]
+
+
+Subsection
+---------------
+Mauris augue urna, convallis ac dui eu, blandit ornare turpis. Vestibulum aliquam interdum ipsum, non efficitur magna varius eget. Suspendisse non est eu lacus eleifend dapibus. Integer placerat mollis risus vitae finibus. Praesent vulputate id risus et viverra. Morbi dui sem, ornare et odio sed, vulputate mattis nisi. Donec a iaculis lorem. Phasellus neque urna, blandit a feugiat at, ullamcorper non tellus. Sed justo est, finibus quis tortor at, lacinia ultrices ante. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur dick butt ridiculus mus. In volutpat volutpat eros. Praesent orci ligula, tincidunt ac tellus sit amet, pellentesque volutpat ligula. Fusce sed elit et dolor pellentesque consequat tempor ut dolor. Pellentesque vitawe orfci in lorem tincidunt scelerisque a ut sapien. Mauris varius ornare elementum. Vivamus tincidunt eros ac consectetur tincidunt. [@hoerl1970ridge; @zou2005regularization]
+
+
+Equations
+===============
+
+Here is an equation:
+
+$$ f_{X}(x) = \left(\frac{\alpha}{\beta}\right)\left(\frac{x}{\beta}\right)^{\alpha-1}e^{-\left(\frac{x}{\beta}\right)^{\alpha}}; \alpha,\beta,x > 0 $$
+
+Inline equations
+-----------------
+
+No problemo: $\phi\{\alpha^\beta\}$
+
+Figures and tables
+=================
+Use the tikzDevice, it will blow your mind ^[footnote: why not?]:
+
+```{r setup}
+library(knitr)
+knit_hooks$set(plot = function(x, options) {
+  if ('tikz' %in% options$dev && !options$external) {
+    hook_plot_tex(x, options)
+  } else hook_plot_md(x, options)
+})
+```
+
+Figures coming from R
+-----------------
+
+```{r fig1, fig.width = 4, fig.height = 4, fig.cap = "Ut eleifend diam mauris, a semper augue blandit rhoncus.", dev = "tikz", external=FALSE, echo = FALSE}
+library(ggplot2)
+print(ggplot(mtcars, aes(x = mpg, y = qsec)) + geom_point() + theme_bw())
+```
+
+Normal figure
+
+```{r fig2, fig.width = 4, fig.height = 4, echo = FALSE, dev = "pdf"}
+plot(runif(25) ~ runif(25))
+```
+
+\clearpage
+
+Tables coming from R
+-----------------
+
+```{r tab1, results = 'asis'}
+print(xtable::xtable(head(mtcars)[,1:4], 
+caption = "Integer at eros luctus", label = "tab1"), 
+comment = FALSE, timestamp = FALSE, caption.placement = "top")
+```
+
+Table \ref{tab1} shows these numbers. Some of those numbers are plotted in Figure \ref{fig:fig1}.
+
+
+```{r tab2}
+head(mtcars[,1:4])
+```
+
+
+Conclusion
+================
+Cras est sapien, ornare sed nulla id, congue lobortis ante. Suspendisse potenti. Ut eleifend diam mauris, a semper augue blandit rhoncus. Quisque bibendum quam diam, non eleifend ante rhoncus et. Cras facilisis volutpat tortor at elementum. Cras sed elementum nisi, eget placerat est. Nulla congue purus lorem, nec mollis sapien varius ut. Nullam tortor risus, blandit eget ipsum sit amet, venenatis consectetur quam. Integer at eros luctus, facilisis sem sit amet, euismod massa.
+
+
+Bibliography 
+===============
+
+
+

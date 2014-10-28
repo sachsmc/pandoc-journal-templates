@@ -1,0 +1,75 @@
+\documentclass[article]{jss}
+
+\usepackage{tikz}
+\usepackage{natbib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% almost as usual
+\author{$for(author)$
+		$author.name$\\$author.affil$$sep$\And
+		$endfor$
+		}
+
+\title{$title$}
+
+%% for pretty printing and a nice hypersummary also set:
+\Plainauthor{$for(author)$ $author.name$$sep$, $endfor$} %% comma-separated
+\Plaintitle{$title$} %% without formatting
+$if(shorttitle)$
+\Shorttitle{$shorttitle$} %% a short title (if necessary)
+$endif$
+%% an abstract and keywords
+\Abstract{
+  $abstract$
+}
+\Keywords{$keywords$}
+$if(plainkey)$
+\Plainkeywords{$plainkey$} %% without formatting
+$else$
+\Plainkeywords{$keywords$} %% without formatting
+$endif$
+%% at least one keyword must be supplied
+
+%% publication information
+%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
+%% \Volume{50}
+%% \Issue{9}
+%% \Month{June}
+%% \Year{2012}
+%% \Submitdate{2012-06-04}
+%% \Acceptdate{2012-06-04}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+  $for(address)$
+  $address$$sep$\\
+  $endfor$
+  \\\email{$email$}
+}
+%% It is also possible to add a telephone and fax number
+%% before the e-mail in the following format:
+%% Telephone: +43/512/507-7103
+%% Fax: +43/512/507-2851
+
+%% for those who use Sweave please include the following line (with % symbols):
+%% need no \usepackage{Sweave.sty}
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+$body$
+
+$if(natbib)$
+
+%\bibliographystyle{jss}
+\bibliography{$bibliography$}
+
+$endif$
+
+\end{document}

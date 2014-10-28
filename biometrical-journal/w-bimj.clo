@@ -1,0 +1,201 @@
+%%
+%% This is file `w-bimj.clo',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% w-class.dtx  (with options: `bimj')
+%% ====================================================================
+%% @LaTeX-file{
+%%   version   = "0.9h",
+%%   date      = "2004/12/04",
+%%   author    = "WILEY-VCH Verlag GmbH \& Co. KGaA, Weinheim",
+%%   copyright = "Copyright 2002--2004 WILEY-VCH Verlag GmbH \& Co. KGaA, Weinheim,
+%%                all rights reserved.  Copying of this file is
+%%                authorized only if either:
+%%                (1) you make absolutely no changes to your copy,
+%%                including name; OR
+%%                (2) if you do make changes, you first rename it
+%%                to some other name.",
+%% }
+%% ====================================================================
+%% $Id: w-class.dtx,v 1.79 2004/12/04 12:25:30 uwe Exp $
+%% ====================================================================
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+\ProvidesFile{w-bimj.clo}
+              [2004/12/04 v0.9h
+      style option for Biometrical Journal]
+\setlength{\textheight}{47cc}
+\setlength{\textwidth}{33cc}
+\setlength{\headheight}{1cc}
+\setlength{\headsep}{1cc}
+\setlength{\topskip}{10pt}
+\setlength{\footskip}{32pt}
+\def\publname{Biometrical Journal}
+\journalname{Biometrical Journal}{Biom. J.}{Biometrical Journal}
+\copyrightinfo{2004}%                           % copyright year
+    {WILEY-VCH Verlag GmbH \& Co. KGaA, Weinheim}% copyright holder
+\journalurl{www.interscience.wiley.com}
+\sectionfont{\normalfont\large\bfseries}
+\subsectionfont{\normalsize\bfseries}
+\subsubsectionfont{\normalfont\normalsize}
+\paragraphfont{\bfseries}
+\subparagraphfont{\bfseries}
+\authorfont{\normalsize\bfseries}
+\translatorfont{\normalsize\normalfont}
+\headingstextfont{\normalfont\small}
+\andfont{\normalfont} 
+%\andfont{\bfseries}  
+\indexsize{\normalsize}
+\bibsize{\small}
+\textheadindent{0mm}
+\headindent{3cc}
+\@firstlevelperiodfalse
+\@trailingperiodfalse
+\afterauthorskip{0.3}
+\afterkwskip{0}
+\afterscskip{0}
+\@authoratbotitlefalse
+\ExcludeTitleFromSkipfalse
+\def\FirstPageTopSkip{\global\topskip2.5cc\relax}
+\def\BeforeMainTextSkip{-10\p@\relax}
+\def\TitleAlignment{flushleft}
+\def\TitleSkip{3cc}
+\setlength{\vch@skip}{3cc minus 1.5cc}
+\if@separatedheads
+\setlength{\aux@tw}{\TitleSkip}
+\else
+\setlength{\aux@tw}{0mm}
+\fi
+\titlefont{\Large\bfseries}
+\pretitlefont{\Large\bfseries\itshape}
+\subtitlefont{\large\bfseries}
+\subjclasslabelfont{\bfseries}
+\subjclassfont{\small}
+\keywordsfont{\normalfont}
+\keywordslabelfont{\itshape}
+\keywordspunct{:}
+\dedicatoryfont{\small\itshape}
+\datesfont{\normalfont\small}
+\renewcommand{\received@name}{Received}
+\renewcommand{\revised@name}{, in revised form}
+\renewcommand{\accepted@name}{, accepted}
+\renewcommand{\@setdate}{\ifx\@empty\received@date\else%
+{\dt@font\noindent%
+\received@name\ \received@date%
+\ifx\@empty\revised@date\else\revised@name\ \revised@date\fi%
+\ifx\@empty\accepted@date\else\accepted@name\ \accepted@date\fi%
+\ifx\@empty\@dateposted\else\@setdateposted\fi%
+}\fi}
+\KeywordsinTitletrue
+\SubjClassinTitletrue
+\AddressinTitletrue
+\@hangaddrlabeltrue
+\DatesinTitletrue
+\addressfont{\normalfont\small}
+\addresslabelfont{\normalfont}
+\currentaddressfont{\itshape}
+\global\let\footnoteFlag=Y%
+\newcommand{\inst}[1]{
+\hbox{\@textsuperscript{\normalfont\unskip#1}}
+}%
+\newcommand{\abstractname}{}
+\@noabstractnamefalse
+\@abstractcopyrightfalse
+\abstractfont{\normalfont\fontsize{9}{10\p@}\selectfont}
+\abstractlabelfont{\itshape}
+\def\AbstractLeftMargin{3cc}
+\def\AbstractRightMargin{0pc}
+\def\BeforeAbstractSkip{\skip@0\p@}
+\EmbeddedAbstractHeadfalse
+\@abstreotitlefalse
+\def\DedicatoryAlignment{}
+\SectNumUprightfalse
+\setlength{\MathIndentation}{3cc minus 1.5cc}
+\setcounter{tocdepth}{3}
+\HeadUnderltrue
+\@indentrunheadfalse
+\if@finallayout
+\def\leftmark{\@nx{{\shortauthors:}\ \shorttitle}{}{}}
+\def\rightmark{\long@journalname\ {\bfseries\current@volume}\ %
+(\current@year){}{}\  \current@issue}
+\DOIprefix{10.1002}
+\def\ps@firstpage{\ps@empty
+  \def\@oddfoot{
+\normalfont\fontsize{6}{7\p@}\normalfont \hfil
+      \numa=\current@year
+      \divide\numa by100
+      \multiply\numa by-100
+      \advance\numa by\current@year
+      \numa=\numa
+\copyright\ \copyrightyear\ \copyrightholder
+     \global\topskip\normaltopskip}%
+  \let\@evenfoot\@oddfoot
+  \def\@oddhead{\vbox{\h@font\hsize\textwidth
+     \hbox to \textwidth{%
+          \long@journalname\ {\bfseries\current@volume}\ %
+          (\current@year)\ \current@issue,\ %
+          \start@page\,--\,\end@page\ %
+  \ifx\@empty\doi@suffix\else\quad\DOI\fi\hfil}%
+     \ifHeadUnderl\vskip 2pt \hrule\fi}\hss}
+  \let\@evenhead\@oddhead % in case an article starts on a left-hand page
+}
+\else
+\def\leftmark{\@nx{{\shortauthors:}\ \shorttitle}{}{}}
+%\def\rightmark{\abbr@journalname\ header will be provided by the publisher}
+\def\rightmark{\abbr@journalname\ {\bfseries\current@volume}\ (\current@year)\ \current@issue\hfil}
+\def\ps@firstpage{\ps@empty
+\def\@oddfoot{
+\normalfont\fontsize{6}{7\p@}\normalfont \copyright\ \current@year\ \copyrightholder \hfil
+{\bf{www.biometrical-journal.com}}
+  \global\topskip\normaltopskip}%
+  \let\@evenfoot\@oddfoot
+  \def\@oddhead{\vbox{\h@font\hsize\textwidth
+    \hbox to \textwidth{\abbr@journalname\ {\bfseries\current@volume}\ (\current@year)\ \current@issue,\ zzz--zzz / DOI:\ 10.1002/\doi@suffix\hfil}% 
+     \ifHeadUnderl\vskip 2pt \hrule\vskip -4pt\fi}\hss}
+  \let\@evenhead\@oddhead % in case an article starts on a left-hand page
+}
+\fi
+\AtBeginDocument{\if@captiontwopack
+\newcommand*\bimjcaptionstyle{%
+  \captionstyle{normal}
+  \renewcommand*\captionfont{\normalfont}
+  \renewcommand*\captionlabelfont{\bfseries}
+  \setcaptionmargin{0pt}%
+  \setlength\captionindent{0pt}%
+%  \renewcommand*\captionlabeldelim{\quad\enskip}%
+  \renewcommand*\captionlabeldelim{\hspace*{7pt}}%
+  \onelinecaptionstrue}
+\else
+\newcommand*\bimjcaptionstyle{%
+  \newcommand*\captionfont{\normalfont\small}
+  \newcommand*\captionlabelfont{\bfseries\small}
+  \newcommand*\captionlabeldelim{\enskip}}
+\fi
+\bimjcaptionstyle}
+\widowpenalty=10000
+\clubpenalty=10000
+\brokenpenalty=10000
+\newdimen\linespacing
+\lineskip=1pt \lineskiplimit=1pt
+\normallineskip=1pt \normallineskiplimit=1pt
+\let\baselinestretch=\@empty
+\newdimen\normalparindent
+\parindent=\normalparindent
+\endinput
+%%
+%% End of file `w-bimj.clo'.

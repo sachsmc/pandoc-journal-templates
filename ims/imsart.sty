@@ -1,0 +1,3120 @@
+%% This is file `imsart.sty'
+%%
+%% LaTeX 2e style file for the processing of LaTeX2e files
+%% of the following IMS/BS journals:
+%%
+%%   The Annals of Probability
+%%   The Annals of Applied Probability
+%%   The Annals of Statistics
+%%   The Annals of Applied Statistics
+%%   Statistical Science
+%%   Probability Surveys
+%%   Statistics Surveys
+%%   Electronic Journal of Statistics
+%%   IMS Lecture Notes-Monograph Series
+%%   IMS Collections
+%%   Bernoulli
+%%   Annales de l'Institut Henri Poincar\'e - Probabilit\'es et Statistiques
+%%   Brazilian Journal of Probability and Statistics
+%%   Stochastic Systems
+%%
+%%   Institute of Mathematical Statistics, U.S.A.
+%%   Bernoulli Society
+%%   Institut Henry Poincare   
+%%   Brazilian Statistical Association
+%%
+%% Macros written by Vytas Statulevicius, VTeX, Lithuania
+%% for Institute of Mathematical Statistics, U.S.A.
+%% Please submit bugs or your comments to vytas@vtex.lt
+%%
+%% The original distribution is located at:
+%% http://www.e-publications.org/ims/support
+%%
+%% This style file contains additional macros and is designed to use
+%% with standart "article.cls"
+%%
+%% You are free to use this style file as you see fit, provided 
+%% that you do not make changes to the file. 
+%% If you DO make changes, you are required to rename this file.
+%%
+%% It may be distributed under the terms of the LaTeX Project Public
+%% License, as described in lppl.txt in the base LaTeX distribution.
+%% Either version 1.0 or, at your option, any later version.
+%%
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+%%
+%% Bug fixes and changes: at end of file
+
+% TeX programming: Vytas Statulevicius, VTeX, Lithuania, vytas@vtex.lt
+% Requires Latex2e, ver.2000.06
+
+\def\imsfmt@name{imsart}
+\def\imsfmt@version{2014/10/16}
+
+\ProvidesFile{imsart.sty}
+        [\imsfmt@version IMS article style (VS)]
+
+% hyperref must be loaded after:
+\@ifpackageloaded{hyperref}{\@latex@error{Package 'hyperref' must be loaded after 'imsart'!}\@ehc}{}
+
+% Passoptions to hyperref:
+
+\PassOptionsToPackage{colorlinks,citecolor=blue,urlcolor=blue,linkcolor=blue,pagecolor=blue,linktocpage=true}{hyperref}
+
+% General options:
+
+% Put keywords as footnote
+\newif\if@keywordsasfootnote
+\DeclareOption{keywordsasfootnote}{\@keywordsasfootnotetrue}
+
+% Put history as footnote
+\newif\if@historyasfootnote
+\DeclareOption{historyasfootnote}{\@historyasfootnotetrue}                  
+
+% Put address as footnote
+\newif\if@addressasfootnote
+\DeclareOption{addressasfootnote}{\@addressasfootnotetrue}                  
+
+% Put addresses at end of document
+\newif\if@addressatend
+\DeclareOption{addressatend}{\@addressatendtrue}                  
+
+% Put "." after inline section headings:
+\newif\if@autosecdot 
+\DeclareOption{autosecdot}  {\@autosecdottrue}
+\DeclareOption{noautosecdot}{\AtBeginDocument{\@autosecdotfalse}}
+
+% do not print thanksref undefined marks
+\newif\if@noundefthanksref
+\DeclareOption{noundefthanksref}{\@noundefthanksreftrue}
+
+% Load amsmath style with corerect settings:
+\newif\if@load@amsmath
+\DeclareOption{amsmath}{\@load@amsmathtrue}
+
+% Load amsthm style with corerect settings:
+\newif\if@load@amsthm
+\DeclareOption{amsthm}{\@load@amsthmtrue}
+
+% Load amsmath with leqno option 
+\newif\if@amsmath@leqno
+
+% Load natbib with correct settings:
+\newif\if@load@natbib
+\DeclareOption{natbib}{\@load@natbibtrue}
+
+% When hyperref is loaded, makes a hyperlink only from year component of the cite command:
+\newif\if@linksfromyear\@linksfromyearfalse
+\DeclareOption{linksfromyear}{\@linksfromyeartrue}
+
+% For LNMS we need to create a TOC of book, so we will
+% enable writing to .aux
+
+\newif\if@supertoc \@supertocfalse
+
+% Information about journals
+
+\def\set@generic{\def\@tempa{-generic}\ifx\journal@id\@tempa\let\affiliation\@gobble\fi}
+
+\DeclareOption{generic}{%
+   \AtEndOfPackage{\set@generic}
+   \def\journal@id{-generic}}
+
+\DeclareOption{ps}{%
+   \def\journal@id{-ps}
+   \def\journal@name{Probability Surveys }
+   \def\journal@issn{ISSN: 1549-5787}
+   \def\journal@url{http://www.i-journals.org/ps}
+   \AtEndOfPackage{\let\affiliation\@gobble}}
+
+% Information about journals
+\DeclareOption{ss}{%
+   \def\journal@id{-ss}
+   \def\journal@name{Statistics Surveys }
+   \def\journal@issn{ISSN: 1935-7516}
+   \def\journal@url{http://projecteuclid.org/ssu}
+   \AtEndOfPackage{\let\affiliation\@gobble}}
+
+% Information about journals
+\DeclareOption{ejs}{%
+   \def\journal@id{-ejs}
+   \def\journal@name{Electronic Journal of Statistics }
+   \def\journal@issn{ISSN: 1935-7524}
+   \def\journal@url{http://projecteuclid.org/ejs}
+   \AtEndOfPackage{\let\affiliation\@gobble}}
+  
+\DeclareOption{lnms}{%
+   \def\journal@id{-lnms}
+   \def\journal@name{IMS Lecture Notes--Monograph Series }
+   \@twosidetrue
+   \def\copyrightowner@text{Institute of Mathematical Statistics}
+   \def\journal@issn{$\copyright$~\ims@href{http://www.imstat.org}{\copyrightowner@text}, \@copyrightyear}%
+   \def\journal@url{http://www.imstat.org/publications/lecnotes.htm}
+   \set@page@layout{30pc}{610pt}% 30pc * 51 line
+   \input{leqno.clo}% formula numbers at left
+   \@amsmath@leqnotrue
+   \@historyasfootnotetrue
+   \@keywordsasfootnotetrue
+   \@addressasfootnotetrue
+   \@supertoctrue
+   \AtBeginDocument{%
+   \setattribute{title}      {skip} {28\p@}
+   \setattribute{keywordname}{size}{\itshape}
+                   }
+}
+
+\DeclareOption{coll}{%
+   \def\journal@id{-coll}
+   \def\journal@name{IMS Collections }
+   \@twosidetrue
+   \def\copyrightowner@text{Institute of Mathematical Statistics}
+   \def\journal@issn{$\copyright$~\ims@href{http://www.imstat.org}{\copyrightowner@text}, \@copyrightyear}%
+   \def\journal@url{http://www.imstat.org/publications/imscollections.htm}
+   \set@page@layout{30pc}{610pt}% 30pc * 51 line
+   \input{leqno.clo}% formula numbers at left
+   \@amsmath@leqnotrue
+   \@historyasfootnotetrue
+   \@keywordsasfootnotetrue
+   \@addressasfootnotetrue
+   \@supertoctrue
+   \AtBeginDocument{%
+   \setattribute{title}      {skip} {28\p@}
+   \setattribute{keywordname}{size}{\itshape}
+                   }
+}
+
+
+% Options for the IMS journals:
+
+\DeclareOption{aap}{%
+   \def\journal@id{-aap}
+   \def\journal@name{Submitted to the Annals of Applied Probability }
+   \def\journal@url{http://www.imstat.org/aap/}
+   \set@page@layout{30pc}{550pt}% 30pc * 46 line
+   \@twosidetrue
+   \input{leqno.clo}% formula numbers at left
+   \@amsmath@leqnotrue
+   \@historyasfootnotetrue
+   \@keywordsasfootnotetrue
+   \@addressatendtrue
+   \@imslayouttrue
+   \@autosecdottrue
+}
+
+\DeclareOption{aop}{%
+   \def\journal@id{-aop}
+   \def\journal@name{Submitted to the  Annals of Probability }
+   \def\journal@url{http://www.imstat.org/aop/}
+   \set@page@layout{30pc}{550pt}% 30pc * 46 line
+   \@twosidetrue
+   \input{leqno.clo}% formula numbers at left
+   \@amsmath@leqnotrue
+   \@historyasfootnotetrue
+   \@keywordsasfootnotetrue
+   \@addressatendtrue
+   \@imslayouttrue
+   \@autosecdottrue
+}
+
+\DeclareOption{aos}{%
+   \def\journal@id{-aos}
+   \def\journal@name{Submitted to the  Annals of Statistics }
+   \def\journal@url{http://www.imstat.org/aos/}
+   \set@page@layout{30pc}{550pt}% 30pc * 46 line
+   \@twosidetrue
+   \input{leqno.clo}% formula numbers at left
+   \@amsmath@leqnotrue
+   \@historyasfootnotetrue
+   \@keywordsasfootnotetrue
+   \@addressatendtrue
+   \@imslayouttrue
+   \@autosecdottrue
+}
+
+\DeclareOption{aoas}{%
+   \def\journal@id{-aoas}
+   \def\journal@name{Submitted to the  Annals of Applied Statistics }
+   \def\journal@url{http://www.imstat.org/aoas/}
+   \set@page@layout{30pc}{550pt}% 30pc * 46 line
+   \@twosidetrue
+   \input{leqno.clo}% formula numbers at left
+   \@amsmath@leqnotrue
+   \@historyasfootnotetrue
+   \@keywordsasfootnotetrue
+   \@addressatendtrue
+   \@imslayouttrue
+   \@autosecdottrue
+}
+
+
+\DeclareOption{sts}{%
+   \def\journal@id{-sts}
+   \def\journal@name{Submitted to Statistical Science }
+   \def\journal@url{http://www.imstat.org/sts/}
+   \set@page@layout{32pc}{658pt}% 32pc * 55 line
+   \@twosidetrue
+   \input{leqno.clo}% formula numbers at left
+   \@amsmath@leqnotrue
+   \@stslayouttrue
+   \AtBeginDocument{\if@twocolumn\set@page@layout{42pc}{658pt}\fi}
+}
+
+\DeclareOption{bj}{%
+   \def\journal@id{-bj}
+   \def\journal@name{Submitted to Bernoulli}
+   \def\journal@url{http://isi.cbs.nl/bernoulli/}
+   \set@page@layout{32pc}{526pt}% 32pc * 44 line
+   \@twosidetrue
+   \@bjlayouttrue
+   \AtEndOfPackage{\let\affiliation\@gobble}
+}
+
+\DeclareOption{aihp}{%
+   \def\journal@id{-aihp}
+   \def\journal@name{Submitted to the Annales de l'Institut Henri Poincar\'e - Probabilit\'es et Statistiques}
+   \def\journal@url{http://www.imstat.org/aihp}
+   \set@page@layout{39pc}{622pt}% 39pc * 52 line
+   \@twosidetrue
+   \@aihplayouttrue
+   \AtEndOfPackage{\let\affiliation\@gobble}
+}
+
+\DeclareOption{bjps}{%
+   \def\journal@id{-bjps}
+   \def\journal@name{Submitted to the Brazilian Journal of Probability and Statistics}
+   \def\journal@url{http://www.redeabe.org.br}
+   \set@page@layout{30pc}{550pt}% 30pc * 46 line
+   \@twosidetrue
+   \@historyasfootnotetrue
+   \@keywordsasfootnotetrue
+   \@addressatendtrue
+   \@bjpslayouttrue
+}
+
+
+\DeclareOption{ssy}{%
+   \def\journal@id{-ssy}
+   \def\journal@name{Stochastic Systems }
+   \def\journal@url{http://www.i-journals.org/ssy/}
+   \def\copyrightowner@text{Institute of Mathematical Statistics}
+   \def\journal@issn{$\copyright$~\ims@href{http://www.imstat.org}{\copyrightowner@text}, \@copyrightyear}%
+   \set@page@layout{30pc}{550pt}% 30pc * 46 line
+   \@twosidetrue
+   \input{leqno.clo}% formula numbers at left
+   \@amsmath@leqnotrue
+   \@historyasfootnotetrue
+   \@keywordsasfootnotetrue
+   \@addressatendtrue
+   \@imslayouttrue
+   \@autosecdottrue
+   \@noundefthanksreftrue
+   \AtEndOfPackage{%
+      \setattribute{copyright}{text}{%
+         \url@fmt{}{\itshape}{\journal@name}{\journal@url}\break%
+         \@ifnonempty{\@pubyear\ \@volume\@issue\@pagerange\break}%
+         \doi@text\break%
+                                    }}
+   \AtBeginDocument{\def\thebibliography{\let\section\specialsection\old@thebibliography}}%
+}
+
+%% Layouts:
+% IMS journals AAP, AOP, AOS has a different layout:
+
+\newif\if@imslayout \@imslayoutfalse
+
+\DeclareOption{imslayout}{
+   \def\journal@id{-imsgeneric}
+   \input{leqno.clo}% formula numbers at left
+   \@amsmath@leqnotrue
+   \@historyasfootnotetrue
+   \@keywordsasfootnotetrue
+   \@addressatendtrue
+   \@imslayouttrue
+   \@autosecdottrue}
+
+% IMS STS journal layout also specific
+\newif\if@stslayout \@stslayoutfalse
+\DeclareOption{stslayout}{
+   \def\journal@id{-stsgeneric}
+   \set@page@layout{32pc}{658pt}% 32pc * 55 line
+   \@twosidetrue
+   \input{leqno.clo}% formula numbers at left
+   \@amsmath@leqnotrue
+   \@stslayouttrue
+   \AtBeginDocument{\if@twocolumn\set@page@layout{42pc}{658pt}\fi}}
+
+% BS BJ journal layout also specific:
+\newif\if@bjlayout \@bjlayoutfalse
+
+% AIHP journal layout also specific:
+\newif\if@aihplayout  \@aihplayoutfalse
+
+% BJPS journal layout also specific:
+\newif\if@bjpslayout  \@bjpslayoutfalse
+
+% Spacing
+\DeclareOption{doublespacing}{\doublespacing}
+\DeclareOption{singlespacing}{\singlespacing}
+
+\def\singlespacing{\renewcommand{\baselinestretch}{}\large\normalsize}
+\def\doublespacing{\renewcommand{\baselinestretch}{1.6}\large\normalsize}
+
+% Do not print id line at bottom of the page:
+\DeclareOption{noinfoline}{\AtBeginDocument{\let\info@line\@empty}}
+\DeclareOption{infoline}  {\AtBeginDocument{\let\info@line\infoline@text}}
+
+% Put lines numbers in margins
+\newif\ifnumberlines@ \numberlines@false
+\DeclareOption{linenumbers}{\numberlines@true}
+\DeclareOption{nolinenumbers}{\numberlines@false}
+
+% Combined options:
+
+% Use this option for submission for pier review:
+\DeclareOption{submission}{%
+  \singlespacing
+  \AtBeginDocument{\let\info@line\infoline@text}
+  \numberlines@false}
+
+% use this option for pre-publication (preprint):
+
+\DeclareOption{preprint}{%
+  \singlespacing
+  \AtBeginDocument{\let\info@line\@empty}
+  \numberlines@false}
+
+
+
+% Initiate some info:
+\def\journal@name{}
+\def\journal@url{}
+\def\journal@issn{}
+\def\journal@id{}
+\def\paper@url{}
+\def\info@line{}
+\def\copyrightowner@text{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% set@page@layout
+
+% \set@page@layout{\textwidth}{\textheight}
+
+\def\set@page@layout#1#2{%
+%
+  \setlength\textwidth{#1}
+  \@settopoint\textwidth
+  \setlength\textheight{#2}
+  \@settopoint\textheight
+%
+% make side margins equal:
+  \setlength\@tempdima        {\paperwidth}
+  \addtolength\@tempdima      {-\textwidth}
+  \setlength\oddsidemargin    {.5\@tempdima}
+  \addtolength\oddsidemargin  {-1in}
+  \setlength\evensidemargin   {\oddsidemargin}
+  \@settopoint\oddsidemargin
+  \@settopoint\evensidemargin
+%
+% topmargin
+  \setlength\topmargin{\paperheight}
+  \addtolength\topmargin{-2in}
+  \addtolength\topmargin{-\headheight}
+  \addtolength\topmargin{-\headsep}
+  \addtolength\topmargin{-\textheight}
+  \addtolength\topmargin{-\footskip}     % this might be wrong!
+  \addtolength\topmargin{-.5\topmargin}
+  \@settopoint\topmargin
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Load imsart.cnf with additional options:
+\@input{\imsfmt@name.cnf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Execute options
+
+\ExecuteOptions{generic,infoline}
+\ProcessOptions
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% dimensions
+
+\setlength\parindent {12\p@}
+\setlength\headsep   {14\p@}
+\setlength\footskip  {14\p@}
+
+\setlength\smallskipamount{6\p@ \@plus 1\p@ \@minus 1\p@}
+\setlength\medskipamount  {12\p@ \@plus 3\p@ \@minus 3\p@}
+\setlength\bigskipamount  {18\p@ \@plus 3\p@ \@minus 3\p@}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% setattribute, getattribute, do@option@list
+
+\def\setattribute{\@ifnextchar[\@setattribute{\@setattribute[]}}
+\def\@setattribute[#1]#2#3#4{\expandafter\gdef\csname #2@#3\endcsname{#4}}
+\def\getattribute#1#2{\csname #1@#2\endcsname}
+\def\sep@key@value#1=#2/?/#3{\setattribute{#3}{#1}{#2}}
+\def\do@option@list#1#2{%
+  \@for\curr@option:={#2}\do{%
+    \expandafter\sep@key@value\curr@option/?/{#1}\relax
+  }%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% newpseudoenvironment
+% same as \newenvironment, but new environment do not have additional groups \bgroup \egroup
+% (i.e. all definitions are not local
+
+\let\org@begin\begin
+\let\org@end\end
+\def\begin#1{%
+  \@ifundefined{pseudo@#1}%
+    {\org@begin{#1}}{\csname pseudo@#1\endcsname[0]\relax}%
+  }
+\def\end#1{%
+  \@ifundefined{pseudo@#1}%
+    {\org@end{#1}}{\csname pseudo@#1\endcsname[1]\relax}%
+  }
+\def\newpseudoenvironment#1#2#3{%
+  \expandafter\gdef\csname pseudo@#1\endcsname[##1]{%
+     \relax\ifcase##1\relax\def\@@next@@{#2}\or\def\@@next@@{#3}\else\let\@@next@@\relax\fi\@@next@@}%
+  }
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% pubyear, volume, paperno
+
+\def\pubyear#1{\gdef\@pubyear{(#1) }\gdef\@copyrightyear{#1 }}
+  \def\@pubyear{}
+  \def\@copyrightyear{}
+
+\def\volumetitle#1{\gdef\volume@title{#1 }}
+
+\def\volume#1{\gdef\@volume{Vol. #1 }}
+  \gdef\@volume{}
+
+\def\issue#1{\gdef\@issue{No. #1 }}
+  \gdef\@issue{}
+
+\def\paperno#1{\gdef\@paperno{Paper no. #1 }}
+  \gdef\@paperno{00} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% firstpage, lastpage, pagerange
+
+\newcounter{firstpage}
+\newcounter{lastpage}
+
+\def\firstpage#1{\def\@tempa{#1}\ifx\@tempa\@empty\else
+  \global\c@firstpage=#1
+  \global\c@lastpage=#1
+  \global\c@page=#1 \ignorespaces\fi}
+
+\def\lastpage#1{\def\@tempa{#1}\ifx\@tempa\@empty\else
+  \global\c@lastpage=#1
+  \ignorespaces\fi}
+
+\def\pagerange@sep{--}
+
+\def\set@pagerange{%
+  \ifnum\c@firstpage=0%
+  \else%
+     \ifnum\c@firstpage=\c@lastpage%
+        \gdef\@pagerange{\thefirstpage}%
+     \else%
+        \gdef\@pagerange{\thefirstpage\pagerange@sep\thelastpage}%
+     \fi%
+   \fi}
+
+\def\@pagerange{}
+
+\def\pagenumbering#1{%
+    \gdef\thefirstpage{\csname @#1\endcsname\c@firstpage}%
+    \gdef\thelastpage{\csname @#1\endcsname\c@lastpage}%
+    \gdef\thepage{\csname @#1\endcsname\c@page}%
+}
+
+% hyperref redefines \pagenumbering, so we must override hyperref definition:
+\let\ims@pagenumbering\pagenumbering
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% startlocaldefs, endlocaldefs
+
+\def\startlocaldefs{\makeatletter}
+\def\endlocaldefs{\makeatother}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% thanksref, thanksmark, thankslabel, thankstext
+% to be safe with hyperref we will use original LaTeX definitions:
+%
+
+\def\saferef#1{\expandafter\safe@setref\csname r@#1\endcsname\@firstoftwo{#1}}
+\let\safe@setref\@setref
+
+\def\safelabel#1{\@bsphack
+  \protected@write\@auxout{}%
+         {\string\thanksnewlabel{#1}{{\@currentlabel}{\thepage}}}%
+  \@esphack}
+
+\long\def\safe@footnotetext#1{\insert\footins{%
+    \reset@font\footnotesize
+    \interlinepenalty\interfootnotelinepenalty
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+    \color@begingroup
+      \def\@thefnmark{}%
+      \@makefntext{%
+        \rule\z@\footnotesep\ignorespaces #1\@finalstrut\strutbox}%
+    \color@endgroup}}%
+
+
+\long\def\orig@footnotetext#1{\insert\footins{%
+    \reset@font\footnotesize
+    \interlinepenalty\interfootnotelinepenalty
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+    \protected@edef\@currentlabel{%
+       \csname p@footnote\endcsname\@thefnmark
+    }%
+    \color@begingroup
+      \@makefntext{%
+        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
+    \color@endgroup}}%
+
+
+
+\let\thanksnewlabel\newlabel
+
+% we want to use various counters:
+\def\usethankscounter#1{%
+  \@ifundefined{current@thankscounter}{\gdef\previous@thankscounter{#1}}{\xdef\previous@thankscounter{\current@thankscounter}}%
+  \def\current@thankscounter{#1}}
+
+\def\restorethankscounter{\xdef\current@thankscounter{\previous@thankscounter}}
+
+\newcounter{thanks}
+\def\thethanks{\@fnsymbol\c@thanks}
+\usethankscounter{thanks}
+
+% address ref:
+\newcounter{addressref}
+\def\theaddressref{\arabic{addressref}}
+
+
+%\def\thanksmark@fmt#1{\hbox{$^{#1}$}}
+\def\thanksmark@fmt#1{\@textsuperscript{\normalfont#1}}
+\def\thanksref@sep{,}
+
+% hooks for the hyperref:
+\def\thankref@hyperlink#1{\saferef{#1thanks}}
+\def\thanks@hypertarget#1{}
+
+% Isvedame zymes
+\DeclareRobustCommand{\thanksref}{\@ifnextchar[{\@tempswatrue\@thanksref}{\@tempswafalse\@thanksref[]}}
+
+\def\@thanksref[#1]#2{%
+  \if@tempswa% []
+    \thanksmark@fmt{#1}%
+  \else%
+    \let\@tempa\@empty%
+    \thanksmark@fmt{\@for\@tempb:=#2\do{%
+       \csname thanksref@hook\endcsname%
+       \@tempa\let\@tempa\thanksref@sep%
+       \edef\@tempb{\expandafter\@firstofone\@tempb\@empty}%
+       \thankref@hyperlink{\@tempb}}}%
+   \fi}
+
+% Suformuojame ir isvedame zyme
+\def\thanksmark{\@ifnextchar[{\@tempswatrue\@thanksmark}{\@tempswafalse\@thanksmark[]}}
+
+\def\@thanksmark[#1]#2{%  
+   \@thankslabel[#1]{#2}%
+   \safelabel{#2thanks}%
+   \thanksmark@fmt{\expandafter\saferef{#2thanks}\thanks@hypertarget{#2}}}
+
+% Suformuojame tik zyme
+\def\thankslabel{\@ifnextchar[{\@tempswatrue\@thankslabel}{\@tempswafalse\@thankslabel[]}}
+
+\def\@thankslabel[#1]#2{%
+  \if@tempswa% []
+     \protected@edef\@currentlabel{#1}%
+   \else% 
+      \refstepcounter{\current@thankscounter}%
+   \fi%
+   \safelabel{#2thanks}}%
+
+% Suformuojame zyme ir idedame teksta i \@thanks:
+\def\thankstext{\@ifnextchar[{\@tempswatrue\@thankstext}{\@tempswafalse\@thankstext[]}}
+
+\def\@thankstext[#1]#2#3{%
+  \@thankslabel[#1]{#2}%
+  \protected@xdef\@thanks{\@thanks\protect\thanks@thefnmark{#2thanks}%
+  \protect\orig@footnotetext{\thanks@hypertarget{#2}#3}}}%
+
+\def\thanks@thefnmark#1{\begingroup\unrestored@protected@xdef\@thefnmark{\saferef{#1}}\endgroup}%
+
+
+
+% ST makrosas savo numeracijos sistemos sukurimui
+\def\setvaluelist#1#2{\@tempcnta=0\relax
+  \@for\@curr@val:=#2\do{%
+     \advance\@tempcnta by1\relax
+     \expandafter\protected@xdef\csname #1@item@\the\@tempcnta\endcsname{\@curr@val}%
+     }%
+     \expandafter\protected@xdef\csname #1@item@0\endcsname{\the\@tempcnta}%
+}
+\xdef\getitemvalue#1#2{\noexpand\csname #1@item@#2\endcsname}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \ead, \printead
+
+\RequirePackage{keyval}
+
+\def\email@text{e-mail: }
+\def\url@text{url: }
+\def\fullurl@text{url: }
+\def\ead@sep{;~}
+\let\ead@size\relax
+\def\printead@fmt#1{#1}
+
+% for BJ journal:
+\newcounter{emailref}
+\setvaluelist{emailmarks}{*,**,\textdagger,\textdaggerdbl}
+\def\theemailref{\getitemvalue{emailmarks}{\the\c@emailref}}
+\define@key{ead}{mark}[true]{\usethankscounter{emailref}\thankslabel{\ead@label}}
+
+
+% naudojame keyval paketa
+\define@key{ead}{email}[true]{\def\ead@type{email}}
+\define@key{ead}{url}[true]{\def\@tempa{fullurl}\ifx\ead@type\@tempa\else\def\ead@type{url}\fi}
+\define@key{ead}{label}{\def\ead@label{#1}}
+
+\define@key{ead}{text}{%
+  \bgroup%
+    \def\\{\string\break}
+    \def\break{\string\break}%
+    \protected@edef\@currentlabel{#1}%
+    \safelabel{\ead@label @\ead@type text}%
+  \egroup}
+
+\define@key{ead}{nopdflink}[true]{%
+   \protected@edef\@currentlabel{nolink}%
+   \safelabel{\ead@label @nopdflink}}
+
+
+\DeclareRobustCommand\ead[2][label= ,email]{{%
+  \def\ead@type{email}% default
+  \checkead@prefix#2://\end%
+  \def\texttildelow{\noexpand\texttildelow}%
+  \setkeys{ead}{#1}%
+  \protected@edef\@currentlabel{#2}%
+  \safelabel{\ead@label @\ead@type}}}
+
+\def\checkead@prefix#1://#2\end{\ifx.#2.\else\def\ead@type{fullurl}\fi}
+
+\newif\ifnot@ead@star
+\newif\if@printead@opt
+
+\DeclareRobustCommand{\printead}{\@ifstar{\not@ead@starfalse\@printead}{\not@ead@startrue\@printead}}
+
+\def\@printead{\@ifnextchar[{\@printead@opttrue\@@printead}{\@printead@optfalse\@@printead[]}}
+
+\def\@@printead[#1]#2{{%
+   \if@printead@opt%[]
+      \def\ims@href@text{#1}%
+      \not@ead@starfalse%
+   \fi%      
+   \let\prev@ead@text\relax%
+   \let\@ead@sep\relax%
+   \let\ead@text\relax%
+   \let\ead@prefix\relax%
+   \def\ead@type{}%
+   \@tempcnta=0%
+   \let\sv@ims@href\ims@href%
+   \printead@fmt{\@for\ead@ref:=#2\do{%
+       \advance\@tempcnta by1%
+       \let\ims@href\sv@ims@href%
+       \@ead@sep\let\@ead@sep\ead@sep%
+       \@ifundefined{r@\ead@ref @nopdflink}{}{\def\ims@href##1##2{##2}}%
+       \@ifundefined{r@\ead@ref @email}{}{\let\ead@text\email@text\def\ead@type{email}\def\ead@prefix{mailto:}}%
+       \@ifundefined{r@\ead@ref @url}{}{\let\ead@text\url@text\def\ead@type{url}\def\ead@prefix{http://}}%
+       \@ifundefined{r@\ead@ref @fullurl}{}{\let\ead@text\fullurl@text\def\ead@type{fullurl}\def\ead@prefix{}}%
+       \ifx\prev@ead@text\ead@text\let\ead@text\relax\fi%
+       \if@printead@opt\ifnum\@tempcnta>1\@latex@error{Command \@backslashchar printead[]{e1} could have only one parameter "e1"!}\@eha\fi%
+       \else\@ifundefined{r@\ead@ref @\ead@type text}{\def\ims@href@text{\@ifundefined{r@\ead@ref thanks}{}{\thanksref{\ead@ref}}\saferef{\ead@ref @\ead@type}}}{\def\ims@href@text{\@ifundefined{r@\ead@ref thanks}{}{\thanksref{\ead@ref}}\saferef{\ead@ref @\ead@type text}}}\fi%
+       \ifnot@ead@star\ead@text\fi{\ead@size\def\null{}\ims@href{\ead@prefix\saferef{\ead@ref @\ead@type}}{\ims@href@text}}%
+       \@ifundefined{ead@text}{}{\let\prev@ead@text\ead@text}}}%                        
+}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \copyrightowner, \corref
+
+\def\copyrightowner#1{\def\copyrightowner@text{#1}}
+
+
+% for corresponding author
+\def\corref#1{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% normaltext, nohyphen, today
+
+% normalus tekstas (justify)
+\def\normaltext{\let\\=\@normalcr%
+  \leftskip\z@ \@rightskip\z@ \rightskip\@rightskip%
+  \parfillskip\@flushglue}
+
+% skiemenavimo isjungimas
+\def\nohyphen{\pretolerance=\@M \tolerance=\@M \hyphenpenalty=\@M \exhyphenpenalty=\@M}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \@ifemptyhbox
+
+\def\@ifnonempty#1{%
+  \setbox\@tempboxa\hbox{\ignorespaces #1}%
+  \ifdim\wd\@tempboxa>1pt #1\fi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\pagestyle{imsheadings} \thispagestyle{copyright}
+
+
+\if@twoside
+
+\def\ps@imsheadings{%
+      \def\@oddfoot{\hfill\info@line}%
+      \let\@evenfoot\@oddfoot%
+      \def\@evenhead{\runninghead@size\rlap{\pagenumber@size\thepage}\evenhead@fmt{\leftmark}}%
+      \def\@oddhead{\runninghead@size\oddhead@fmt{\rightmark}\llap{\pagenumber@size\thepage}}}
+\else
+\def\ps@imsheadings{%
+      \def\@oddfoot{\hfill\info@line}%
+      \let\@evenfoot\@oddfoot%
+      \def\@evenhead{\runninghead@size\hfill\leftmark/\rightmark\hfill\llap{\pagenumber@size\thepage}}%
+      \def\@oddhead{\runninghead@size\hfill\leftmark/\rightmark\hfill\llap{\pagenumber@size\thepage}}}
+\fi
+
+\def\ps@copyright{\let\@mkboth\@gobbletwo%
+  \def\@evenhead{\parbox[t]{\textwidth}{\copyright@size\copyright@text}}%
+  \let\@oddhead\@evenhead%
+  \def\@oddfoot{\hfill\pagenumber@size\thepage\hfill\llap{\info@line}}%
+  \let\@evenfoot\@oddfoot}
+
+\def\evenhead@fmt#1{\hfill#1\hfill}
+\def\oddhead@fmt#1{\hfill#1\hfill}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% url@fmt
+
+
+\def\journalurl#1{\def\journal@url{#1}}
+\def\paperurl#1{\def\paper@url{#1}}
+
+% DOI
+
+\def\doi#1{%
+  \gdef\@doi{#1}%
+  \gdef\doi@text{\url@fmt{DOI: }{\ttfamily}{#1}{\doi@base\@doi}}%
+}
+
+\let\@doi\relax
+
+\def\doi@base{http://dx.doi.org/}
+
+\protected\def\relateddoi{\@ifnextchar[{\@tempswatrue\@relateddoi}{\@tempswafalse\@relateddoi[]}}
+\def\@relateddoi[#1]#2#3{\protect\ims@href{\doi@base#3}{#3}}%
+
+\protected\def\relateddois{\@ifnextchar[{\@tempswatrue\@relateddois}{\@tempswafalse\@relateddois[]}}
+\def\@relateddois[#1]#2#3{%
+  \@thankslabel[#1]{#2}%
+  \bgroup%
+     \protected@xdef\@thanks{\@thanks\protect\thanks@thefnmark{#2thanks}%
+     \protect\@footnotetext{\thanks@hypertarget{#2}#3}}%
+  \egroup%
+}%
+
+% arXiv
+
+
+\def\arxiv#1{%
+  \gdef\@arxiv{#1}%
+  \gdef\doi@text{\url@fmt{arXiv: }{\ttfamily}{#1}{\arxiv@base\@arxiv}}%
+}
+
+\let\@arxiv\relax
+
+% http://arxiv.org/abs/math.PR/0603300
+
+\def\arxiv@base{http://arxiv.org/abs/}
+
+
+% {url}{text}
+\def\ims@href#1#2{#2}
+
+% {prefix}{font}{text}{url}
+
+\def\url@fmt#1#2#3#4{%
+   \edef\@tempa{#3}%
+   \ifx\@tempa\@empty%
+   \else%
+     #1{#2\ims@href{#4}{#3}}%
+   \fi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LIST ENVIRONMENTS
+
+\parsep\z@
+\topsep\smallskipamount
+\partopsep\z@
+\itemsep\z@
+\labelsep.5em
+
+\def\@listI{\leftmargin\leftmargini
+            \parsep\z@
+            \topsep\smallskipamount
+            \itemsep\z@}
+
+\def\list@parindent{1pc}
+
+% quotation
+\let\quotation@size\footnotesize
+\def\quotation@itemindent{\list@parindent}
+\def\quotation@parindent{\list@parindent}
+\def\quotation@leftmargin{\list@parindent}
+\let\quotation@rightmargin\z@
+\let\quotation@topsep\smallskipamount
+
+\def\quotation{%
+        \list{}{\quotation@size%
+        \listparindent\quotation@parindent%
+        \itemindent   \quotation@itemindent%
+        \rightmargin\quotation@rightmargin   \leftmargin\quotation@leftmargin%
+        \partopsep\z@ \topsep\quotation@topsep \parsep\z@%
+                        }%
+        \item[\Q@strut]\relax}
+
+\def\endquotation{\endlist}
+
+\def\Q@strut{\leavevmode\hbox{\vrule height9pt depth1pt width0pt}}
+
+% quote
+\let\quote@size\footnotesize
+\def\quote@indent{\z@}
+\def\quote@leftmargin{2pc}
+\def\quote@rightmargin{2pc}
+\let\quote@topsep\smallskipamount
+
+\def\quote{%
+        \list{}{\quote@size%
+        \listparindent\quote@indent%
+        \itemindent \listparindent%
+        \rightmargin\quote@rightmargin   \leftmargin\quote@leftmargin%
+        \partopsep\z@ \topsep\quote@topsep \parsep\z@%
+                       }%
+        \item\relax}
+
+\def\endquote{\endlist}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% table, figure
+
+\def\fnum@table{\tablename~\thetable}
+\setlength\belowcaptionskip{4\p@}
+
+\renewenvironment{table}
+               {\let\@makecaption\@maketablecaption\@float{table}}
+               {\end@float}
+\renewenvironment{table*}
+               {\let\@makecaption\@maketablecaption\@dblfloat{table}}
+               {\end@dblfloat}
+
+\long\def\@maketablecaption#1#2{%
+      \tablecaption@shape\tablecaption@size%
+      {\tablename@size #1}\tablename@skip #2\par
+      \vskip\belowcaptionskip}
+
+\setattribute{tablecaption}{shape}{\centering}
+\setattribute{tablecaption}{size} {\footnotesize\itshape}
+\setattribute{tablename}   {size} {\scshape}
+\setattribute{tablename}   {skip} {\endgraf}
+
+
+% figure : use \@makecaption:
+\renewcommand\figurename{Fig}
+
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \footnotesize
+  \sbox\@tempboxa{\itshape\textsc{#1}. #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    \itshape\textsc{#1}. #2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \figurecaption@size
+  \sbox\@tempboxa{{\figurename@size #1}\figurename@skip #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    {\figurename@size #1}\figurename@skip #2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+
+\setattribute{figurecaption}{size}{\footnotesize\itshape}
+\setattribute{figurename}   {size}{\scshape}
+\setattribute{figurename}   {skip}{.~}
+
+
+\def\@floatboxreset{%
+        \reset@font
+        \@setminipage
+        \singlespacing
+        \footnotesize
+        \centering
+}
+
+\if@aihplayout
+  \setattribute{tablecaption}{size} {\footnotesize}
+  \setattribute{figurecaption}{size}{\footnotesize}
+\fi
+
+\if@bjpslayout
+  \setattribute{tablename}   {size} {\bfseries\upshape}
+  \setattribute{tablename}   {skip} {\enskip}
+
+  \setattribute{figurename}   {size}{\bfseries\upshape}
+  \setattribute{figurename}   {skip}{\enskip}
+  \def\figurename{Figure}
+\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FOOTNOTE
+
+\renewcommand\@makefntext[1]{%
+    \parindent12pt\@makefnmark #1}
+
+\def\@makefnmark{\@textsuperscript{\normalfont\@thefnmark}}%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION commands:
+% from latex.ltx:
+% Two improvements:
+% 1. if section command is defined as "inline" the '.' will be inserted after heading;
+% 2. section* will write to toc and will appear in pdf bookmarks
+
+% dirty trick...
+\def\@startsection#1#2#3#4#5#6{%
+  \if@noskipsec \leavevmode \fi
+  \par
+  \@tempskipa #4\relax
+  \@afterindenttrue
+  \ifdim \@tempskipa <\z@
+    \@tempskipa -\@tempskipa \@afterindentfalse
+  \fi
+  \if@nobreak
+    \everypar{}%
+  \else
+    \addpenalty\@secpenalty\addvspace\@tempskipa
+  \fi
+  \@ifstar
+    {\def\ssection@level{#2}\@ssect{#3}{#4}{#5}{#6}}%
+    {\@dblarg{\@sect{#1}{#2}{#3}{#4}{#5}{#6}}}}
+
+% Trick for the hyperref:
+\def\setaftersec@dot#1{\if@autosecdot\setbox0=\hbox{#1}\ifdim\wd0>0\p@\def\aftersec@dot{.}\else\def\aftersec@dot{}\fi\fi}
+\let\aftersec@dot\relax
+
+% section - will add hook for the dot after section heading
+\def\@sect#1#2#3#4#5#6[#7]#8{%
+  \ifnum #2>\c@secnumdepth
+    \let\@svsec\@empty
+  \else
+    \refstepcounter{#1}%
+    \protected@edef\@svsec{\@seccntformat{#1}\relax}%
+  \fi
+  \@tempskipa #5\relax
+  \ifdim \@tempskipa>\z@
+    \begingroup
+      #6{%
+        \@hangfrom{\hskip #3\relax\@svsec}%
+          \interlinepenalty \@M #8\@@par}%
+    \endgroup
+    \csname #1mark\endcsname{#7}%
+    \addcontentsline{toc}{#1}{%
+      \ifnum #2>\c@secnumdepth \else
+        \protect\numberline{\csname the#1\endcsname}%
+      \fi
+      #7}%
+  \else
+    \setaftersec@dot{#8}%
+    \def\@svsechd{%
+      #6{\hskip #3\relax
+      \@svsec #8\aftersec@dot}%
+      \csname #1mark\endcsname{#7}%
+      \addcontentsline{toc}{#1}{%
+        \ifnum #2>\c@secnumdepth \else
+          \protect\numberline{\csname the#1\endcsname}%
+        \fi
+        #7}}%
+  \fi
+  \@xsect{#5}}
+
+% section* - will add hook for the dot after section heading and \contentsline 
+\def\@ssect#1#2#3#4#5{%
+  \@tempskipa #3\relax
+  \ifdim \@tempskipa>\z@
+    \begingroup
+      #4{%
+        \@hangfrom{\hskip #1}%
+          \interlinepenalty \@M #5\@@par}%
+    \endgroup
+  \else
+    \setaftersec@dot{#5}%
+    \def\@svsechd{#4{\hskip #1\relax #5\aftersec@dot}}%
+  \fi
+  \ifnum\ssection@level=1\phantomsection\addcontentsline{toc}{section}{#5}\fi%
+  \@xsect{#3}}
+
+% Block adding to contents for the next command only:
+\def\nocontentsline{%
+  \let\@@addcontentsline\addcontentsline%
+  \ifx\hyper@anchor\@undefined
+    \def\addcontentsline##1##2##3{\let\addcontentsline\@@addcontentsline}
+  \else
+    \def\addcontentsline##1##2##3##4{\let\addcontentsline\@@addcontentsline}
+  \fi
+}
+
+\def\qq#1{%
+  \bgroup%
+    \ifx.#1.\relax%
+      \ifmmode%
+        \mbox{\normalfont\textbf{???}}
+      \else%
+        \normalfont\textbf{???}\fi
+    \else%
+      \ifmmode%
+        \mbox{\normalfont\textbf{#1}}%
+      \else%
+        \normalfont\textbf{#1}%
+      \fi%
+    \fi%
+  \egroup%
+}
+
+% \phantomsection is defined in hyperref
+\let\phantomsection\relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FRONTMATTER SETTINGS
+
+% FRONT MATTER FORMATTING PARAMETERS
+
+\setattribute{frontmatter} {style} {\centering}
+\setattribute{title}       {style} {\centering\def\\{\break}}
+\setattribute{author}      {style} {\centering}
+\setattribute{address}     {style} {\centering}
+\setattribute{abstract}    {style} {\normaltext}
+\setattribute{keyword}     {style} {\normaltext}
+\setattribute{history}     {style} {\normaltext}
+
+% FRONT MATTER SKIPS
+\setattribute{title}       {skip} {18\p@}
+\setattribute{atltitle}    {skip} {14\p@}
+\setattribute{authors}     {skip} {12pt}
+\setattribute{dedicated}   {skip} {12\p@}
+\setattribute{address}     {skip} {6\p@ plus 1\p@ minus 1\p@}
+\setattribute{affiliation} {skip} {6\p@ plus 1\p@ minus 1\p@}
+\setattribute{abstract}    {skip} {10\p@}
+\setattribute{abstractname}{skip} {:\enskip}
+\setattribute{keyword}     {skip} {10\p@}
+\setattribute{history}     {skip} {10\p@}
+\setattribute{frontmatter} {cmd}  {\vskip20\p@ plus 3\p@ minus 3\p@
+                                   \@afterindentfalse\@afterheading}
+\setattribute{firstpage}   {cmd}  {}
+
+% FRONT MATTER DIMENSIONS
+\setattribute{abstract}   {width} {.8\textwidth}
+\setattribute{abstract}  {indent} {0\p@} 
+\setattribute{keyword}    {width} {.8\textwidth}
+\setattribute{keyword}   {indent} {0\p@} %
+\setattribute{history}    {width} {.8\textwidth}
+
+% FRONT MATTER FONTS 
+\setattribute{dochead}    {size} {\Large\bfseries}
+\setattribute{title}      {size} {\LARGE\bfseries}
+\setattribute{author}     {size} {\normalsize\bfseries}
+\setattribute{fnms}       {size} {}
+\setattribute{snm}        {size} {}
+\setattribute{address}    {size} {\footnotesize\itshape\mdseries}
+\setattribute{affiliation}{size} {\footnotesize\itshape\mdseries}
+\setattribute{dedicated}  {size} {\normalsize\itshape}
+\setattribute{ead}        {size} {\upshape\ttfamily}
+\setattribute{abstract}   {size} {\footnotesize\upshape\mdseries}
+\setattribute{abstractname}{size} {\bfseries}
+\setattribute{keyword}    {size} {\footnotesize\upshape\mdseries}
+\setattribute{keywordname}{size} {\bfseries}
+\setattribute{history}    {size} {\footnotesize\mdseries}
+\setattribute{copyright}  {size} {\footnotesize\raggedright}
+\setattribute{runninghead}{size} {\footnotesize\itshape}
+\setattribute{pagenumber} {size} {\footnotesize\upshape}
+\setattribute{thebibliography}{size}{\normalsize}
+
+% FRONT MATTER CASE
+\setattribute{dochead}    {case} {}
+\setattribute{title}      {case} {}
+\setattribute{runninghead}{case} {}
+
+% TEXT, etc.
+\setattribute{doi}        {text} {\url@fmt{url: }{\ttfamily}{\paper@url}{\paper@url}}
+\setattribute{copyright}  {text} {\url@fmt{}{\bfseries}{\journal@name}{\journal@url}\break%
+                                  \@ifundefined{volume@title}{}{\textbf{\volume@title}\break}%
+                                  \@ifnonempty{\@volume\@pubyear\@pagerange\break}%
+                                  \@ifnonempty{\journal@issn\break}%
+                                  \doi@text}%
+
+\setattribute{infoline}   {text} {\lower12pt \hbox{\footnotesize\ttfamily\imsfmt@name\journal@id\ ver. \imsfmt@version\ file: \jobname.tex\ date: \today}}
+\setattribute{copyright} {owner} {$\copyright$~\@copyrightyear \copyrightowner@text}
+\setattribute{author}   {prefix} {}
+\setattribute{keyword} {postfix} {\unskip.}
+
+\def\abstractname{Abstract}
+
+% HISTORY
+\setattribute{history}  {prefix}  {}
+\setattribute{history}  {postfix} {.}
+\setattribute{received} {prefix}  {Received~}
+\setattribute{received} {postfix} {}
+\setattribute{revised}  {prefix}  {; revised~}
+\setattribute{revised}  {postfix} {}
+\setattribute{accepted} {prefix}  {; accepted~}
+\setattribute{accepted} {postfix} {}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FRONTMATTER STUFF
+
+% COUNTERS, ETC
+\newcounter{author}
+\newcounter{address}
+\newdimen\sv@mathsurround
+\def\author@num{0}
+
+% RUNNING HEAD
+\def\runtitle#1{\gdef\@runtitle{\runninghead@case{#1}}}                      \def\@runtitle{}
+\def\runauthor#1{{\def\etal{et al.}\gdef\@runauthor{\runninghead@case{#1}}}} \def\@runauthor{}
+
+\newdimen\sv@parindent
+\sv@parindent\parindent
+
+\newbox\fm@box
+\newdimen\fm@size
+
+\let\hy@frontmatter\relax
+\let\hy@endfrontmatter\relax
+\let\tableofcontents@fmt\relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FRONTMATTER
+
+\def\frontmatter{%
+  \global\c@author\z@
+  \global\c@address\z@
+  \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+%
+  \if@changetoc
+     \let\old@tableofcontents\tableofcontents%
+     \def\tableofcontents{\let\tableofcontents@fmt\old@tableofcontents}%
+  \fi
+%
+  \def\pdftitle##1{\write@pdfinfo{\user@hy@title}{##1}}
+  \def\pdfauthor##1{\write@pdfinfo{\user@hy@author}{##1}}
+  \def\pdfsubject##1{\write@pdfinfo{\user@hy@subject}{##1}}
+  \def\pdfkeywords##1{\write@pdfinfo{\user@hy@keywords}{##1}}
+%
+  \if@supertoc%
+    \addtocontents{toc}{\protect\contentsline{begintocitem}{}{}{}}%    
+    \addtocontents{toc}{\protect\contentsline{jobname}{\jobname}{}{}}
+    \ifx\@doi\relax \else\addtocontents{toc}{\protect\contentsline{doi}{\@doi}{}{}}\fi%
+    \ifx\@arxiv\relax \else\addtocontents{toc}{\protect\contentsline{arxiv}{\@arxiv}{}{}}\fi%
+  \fi
+%
+  \sv@mathsurround\mathsurround \m@th
+  \parindent\z@
+  \hy@frontmatter
+  \global\let\maketitle\relax
+  \open@fm \ignorespaces}
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ENDFRONTMATTER
+
+\def\endfrontmatter{%
+  \global\@topnum\z@
+  \set@pagerange
+  \markboth{\@runauthor}{\@runtitle}%
+  \thispagestyle{copyright}%
+%
+  \put@fmt@data%
+%
+  \close@fm
+%
+  \firstpage@cmd
+%
+  \write@pdfinfo{\hy@author}{\the\authors@list}
+  \write@pdfinfo{\hy@subject}{\journal@name\@copyrightyear\@volume\@issue\@pagerange}
+  \write@pdfinfo{\hy@keywords}{\the\keywords@list}
+%
+  \if@supertoc%
+    \addtocontents{toc}{\protect\contentsline{author}{\the\authors@list}{\thepage}{}}%    
+    \addtocontents{toc}{\protect\contentsline{endtocitem}{}{}{}}%    
+  \fi%
+%
+  \write\@mainaux{\string\gdef\string\author@num{\the\c@author}}
+  \hy@endfrontmatter
+  \global\mathsurround\sv@mathsurround
+  \global\c@footnote\z@
+  \global\let\@thanks\@empty  
+  \let\title\relax       
+  \let\author\relax
+  \let\address\relax
+  \let\frontmatter\relax \let\endfrontmatter\relax
+  \let\@maketitle\relax  \let\@@maketitle\relax
+  \aftergroup\frontmatter@cmd
+  }
+
+
+\def\put@fmt@data{%
+  \copyright@fmt%
+  \@thanks%
+  \abstract@fmt%
+  \keyword@fmt%
+  \history@fmt
+  \tableofcontents@fmt}
+
+
+\newdimen\t@xtheight
+\def\init@settings{
+\splittopskip=\topskip \splitmaxdepth=\maxdepth
+\t@xtheight\textheight \advance\t@xtheight-\splittopskip}
+
+\def\no@harm{\let\thanks=\@gobble\let\thanksref=\@gobble\let~\space\def\ead[##1]##2{}\let\\=\@empty \def\protect{\noexpand\protect\noexpand}}
+
+\def\open@fm{%
+  \global\setbox\fm@box=\vbox\bgroup
+  \hsize=\textwidth
+  \frontmatter@style}
+
+\def\close@fm{%
+  \par \egroup
+  \fm@size=\dp\fm@box \advance\fm@size by \ht\fm@box
+  \@whiledim\fm@size>\t@xtheight \do{%
+    \global\setbox\@tempboxa=\vsplit\fm@box to \t@xtheight
+    \unvbox\@tempboxa 
+    \fm@size=\dp\fm@box \advance\fm@size by \ht\fm@box}
+  \if@twocolumn
+    \emergencystretch=1pc \twocolumn[\unvbox\fm@box]
+  \else
+    \unvbox\fm@box
+  \fi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DOCHEAD
+\def\dochead#1{%
+  \bgroup
+    \dochead@size
+    \leavevmode\vphantom{\strut}\dochead@case{#1}\par
+  \egroup
+  \setattribute{title}{skip}{8\p@}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TITLE
+\def\title#1{%
+  \vglue\title@skip%
+% check if we are in {frontmatter}
+  \def\reserved@a{frontmatter}
+  \ifx\reserved@a\@currenvir \else \hy@frontmatter\fi
+  \bgroup%
+    \no@harm%
+    \xdef\@argi{#1}%
+    \xdef\@title{#1}%
+  \egroup%
+  \write@pdfinfo{\hy@title}{\@argi}
+  \if@supertoc%   
+    \addtocontents{toc}{\protect\contentsline{title}{\@argi}{\thepage}{}}%    
+  \fi%
+  \bgroup%
+    \title@style\title@size\title@case{#1}\par%
+  \egroup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ATLTITLE
+
+\def\atltitle#1{%
+  \vglue\atltitle@skip%
+  \bgroup
+    \title@size #1\par%
+  \egroup}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% AUTHOR
+
+% AUG - author block
+\def\smart@par{\ifhmode\par\fi}
+\newenvironment{aug}{}{\smart@par}
+
+
+\def\and{\unskip~and~}
+
+\def\author{\@ifnextchar[{\author@fmt}{\author@fmt[]}}
+
+\def\author@fmt[#1]#2{%
+  \stepcounter{author}%
+  \author@fmt@init%
+  \let\author@fmt@init\relax%
+  \bgroup% 
+     \def\degs##1{##1}\def\fnms##1{##1}\def\inits##1{##1}\def\snm##1{##1}\def\roles##1{##1}%
+     \@tempcnta=\author@num\relax%
+     \ifnum\c@author=\@tempcnta \def\author@sep{ and }\else \def\author@sep{, }\fi%
+     \ifnum\c@author=1\addto@authors@list{#2}\else\addto@authors@list{\author@sep #2}\fi%
+     \def\fnms##1{{\fnms@size{##1}}}\def\snm##1{\snm@size{##1}}%
+     \noindent#2\thanksref{#1}%
+  \egroup}
+
+\def\author@fmt@init{%
+   \vskip\authors@skip%
+   \noindent\leavevmode\author@style\author@size\author@prefix }
+
+\let\author@fmt@init@def\author@fmt@init
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DEDICATED
+\def\dedicated#1{%
+  \vskip\dedicated@skip
+  \bgroup
+    \dedicated@size #1\par
+  \egroup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ADDRESS
+\def\address{\@ifnextchar[{\address@fmt}{\address@fmt[]}}
+
+\def\address@fmt[#1]#2{%
+  \smart@par%
+  \let\author@fmt@init\author@fmt@init@def
+  \vskip\address@skip%
+  {\address@style\address@size\leavevmode\ifx.#1.\else\usethankscounter{addressref}\thanksmark{#1}\restorethankscounter\fi#2\par}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% AFFILIATION
+
+\def\affiliation{\@ifnextchar[{\affiliation@fmt}{\affiliation@fmt[]}}
+
+\def\affiliation@fmt[#1]#2{%
+  \smart@par%
+  \let\author@fmt@init\author@fmt@init@def%
+  \vskip\affiliation@skip%
+  \def\affiliation@skip{\z@}%
+  \bgroup
+    \affiliation@size%
+    \leavevmode%
+    \ifx.#1.\else\usethankscounter{addressref}\thanksmark{#1}\restorethankscounter\fi%
+    #2\par
+  \egroup
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CONTRIBUTOR
+% For LNMS we must write as index entry:
+% \contributor{Author, F.}{University}
+% \indexentry{Author, F., \textit  {Some University}}{}
+
+\let\contributor\@gobbletwo
+\if@supertoc
+  \def\contributor#1#2{%
+     \addtocontents{idx}{\protect\indexentry{#1, \protect\textit{#2}}{}}%
+  }
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% COPYRIGHTOWNER
+
+\def\copyright@fmt{%
+  \@ifundefined{\copyrightowner@text}{}{\safe@footnotetext{\copyright@owner}}
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ABSTRACT
+
+\newbox\abstract@box
+
+\define@key{abstract}{language}{\set@loc@hyphenation{#1}\set@loc@abstractname{#1}}
+
+\gdef\abstract{\@ifnextchar[{\@abstract}{\@abstract[]}}
+
+\def\@abstract[#1]{%
+     \setkeys{abstract}{#1}%
+     \global\setbox\abstract@box=\vbox\bgroup%
+     \ifvoid\abstract@box\else%
+        \unvbox\abstract@box%
+        \vskip\abstract@skip%
+     \fi%
+     \@tempdima\textwidth%
+     \advance\@tempdima by-\abstract@width%
+     \divide\@tempdima by2%
+     \abstract@style%
+     \leftskip\@tempdima\rightskip\@tempdima%
+     \abstract@size%
+     \parindent\sv@parindent%
+     \noindent\hskip\abstract@indent{\abstractname@size\abstractname\abstractname@skip}\ignorespaces}
+
+\def\endabstract{\par\egroup}
+
+\def\abstract@fmt{%
+  \ifvoid\abstract@box\else
+    \vskip\abstract@skip%
+    \unvbox\abstract@box
+  \fi}
+
+\def\set@loc@hyphenation#1{%
+  \@ifundefined{l@#1}{}{\expandafter\language\csname l@#1\endcsname}}
+
+\def\set@loc@abstractname#1{%
+   \def\abstractname@english{Abstract}
+   \def\abstractname@german{Zusammenfassung}
+   \def\abstractname@french{R\'esum\'e}
+   \def\abstractname@spanish{Resumen.}
+   \@ifundefined{abstractname@#1}%
+      {\@latex@error{Nera kalbos '#1` palaikymo!}{}}%
+      {\edef\abstractname{\csname abstractname@#1\endcsname}}%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HISTORY: received, revised, accepted
+
+\def\history@exist{0}
+
+\def\received#1{\def\@tempa{#1}\ifx\@tempa\@empty\else\gdef\@received{#1}\gdef\history@exist{1}\fi}
+  \def\@received{\@nil}
+\def\revised#1{\def\@tempa{#1}\ifx\@tempa\@empty\else\gdef\@revised{#1}\gdef\history@exist{1}\fi}
+  \def\@revised{\@nil}
+\def\accepted#1{\def\@tempa{#1}\ifx\@tempa\@empty\else\gdef\@accepted{#1}\gdef\history@exist{1}\fi}
+  \def\@accepted{\@nil}
+
+\def\empty@data{\@nil}
+
+\def\history@fmt{%
+  \ifcase\history@exist\else%
+  \bgroup
+    \nobreak%
+    \vskip\history@skip%
+    \nobreak%
+    \history@style%
+    \history@size%
+    \@tempdima\textwidth%
+    \advance\@tempdima by-\history@width%
+    \divide\@tempdima by2%
+    \leftskip\@tempdima
+    \rightskip\@tempdima
+    \leavevmode
+    \history@prefix
+    \ifx\@received\empty@data \else
+      \received@prefix\@received \received@postfix%
+    \fi
+    \ifx\@revised\empty@data \else
+      \revised@prefix\@revised \revised@postfix%
+    \fi
+    \ifx\@accepted\empty@data \else
+      \accepted@prefix\@accepted \accepted@postfix%
+    \fi
+  \history@postfix\par%
+  \egroup%
+  \gdef\history@exist{0}
+\fi
+}
+
+\def\sday#1{#1}
+\def\smonth#1{\@ifundefined{month@item@#1}%
+     {\@latex@error{Nera tokio menesio, kurio numeris #1!}{??}}%
+     {\getitemvalue{month}{#1}}%
+  }%
+\def\syear#1{#1}
+\setvaluelist{month}{January,February,March,April,May,June,July,August,September,October,November,December}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% KEYWORDS
+
+\newbox\keyword@box
+\newdimen\pre@kwd@depth
+
+\setattribute{keyword}{AMS}{AMS 2000 subject classifications:}
+\setattribute{keyword}{MSC}{MSC 2010 subject classifications:}
+\setattribute{keyword}{MSC2010}{MSC 2010 subject classifications:}
+
+\setattribute{keyword}{KWD}{Keywords and phrases:}
+% raktas=class
+\setattribute[default]{keyword}{class}{KWD}
+
+%  \keyword@class-> KWD
+%  \keyword@KWD  -> AMS 2000... 
+
+\gdef\keyword{\@ifnextchar[{\@keyword}{\@keyword[class=KWD]}}
+
+\gdef\@keyword[#1]{%
+  \do@option@list{keyword}{#1}%
+  \def\keyword@name{\csname keyword@\keyword@class\endcsname}%
+  \let\kwd@sep\relax
+%
+  \global\setbox\keyword@box=\vbox\bgroup%
+     \ifvoid\keyword@box\else%
+        \unvbox\keyword@box
+        \vskip-\pre@kwd@depth\vtop to\pre@kwd@depth{}%
+     \fi
+     \@tempdima\textwidth%
+     \advance\@tempdima by-\keyword@width%
+     \divide\@tempdima by2%
+     \keyword@style%
+     \leftskip\@tempdima\rightskip\@tempdima%
+     \keyword@size%
+     \parindent\sv@parindent%
+     \noindent\hskip\keyword@indent{\keywordname@size\keyword@name}\space\hskip.1pt}
+
+\def\endkeyword{\keyword@postfix\par\global\pre@kwd@depth\prevdepth\egroup}
+
+\def\keyword@fmt{%
+  \ifvoid\keyword@box\else
+    \vskip\keyword@skip%
+    \unvbox\keyword@box
+  \fi}
+
+
+% \kwd[; ]{foo}
+  \def\sep{\unskip\string, }%
+  \newif\if@firstkeywordinlist \@firstkeywordinlisttrue
+
+  \DeclareRobustCommand*\kwd{\@ifnextchar[\@kwd{\@kwd[\kwd@sep]}}%
+  \def\@kwd[#1]#2{\unskip#1{#2}\if@firstkeywordinlist\addto@keywords@list{#2}\@firstkeywordinlistfalse\else\addto@keywords@list{, #2}\fi\let\kwd@sep\sep}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \maketitle
+% if \frontmatter is not used, we will redefine \maketitle
+
+\def\local@maketitle{%
+  \global\@topnum\z@
+  \set@pagerange
+  \markboth{\@runauthor}{\@runtitle}%
+  \thispagestyle{copyright}%
+%
+  \put@fmt@data%
+%
+%  \print@titlepage
+%
+  \write@pdfinfo{\hy@author}{\the\authors@list}
+  \write@pdfinfo{\hy@keywords}{\the\keywords@list}
+  \hy@endfrontmatter
+  \global\mathsurround\sv@mathsurround
+  \global\c@footnote\z@
+  \global\let\@thanks\@empty  
+  \let\title\relax       
+  \let\author\relax
+  \let\address\relax
+  \let\frontmatter\relax \let\endfrontmatter\relax
+  \let\@maketitle\relax  \let\@@maketitle\relax
+  \normalfont\normaltext
+  \parindent\sv@parindent
+  \frontmatter@cmd
+  }
+
+\AtBeginDocument{\let\maketitle\local@maketitle}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PROCESS LAYOUT OPTIONS
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Put keywords as footnote
+\if@keywordsasfootnote
+
+  \newtoks\keyword@toks
+
+  \newpseudoenvironment{keyword}{\gdef\keyword@exist{1}\get@keyword@toks}{}
+
+  \def\get@keyword@toks#1\end{\keyword@toks=\expandafter{\the\keyword@toks\keyword#1\endkeyword}\@gobble}
+
+  \def\keyword@exist{0}
+  
+  \gdef\keyword#1{\@ifnextchar[{\@keyword}{\@keyword[class=KWD]}}
+
+  \gdef\@keyword[#1]{%
+    \do@option@list{keyword}{#1}%
+    \def\keyword@name{\csname keyword@\keyword@class\endcsname}%
+    \let\kwd@sep\relax%
+    \keyword@style%
+    \keyword@size%
+    \parindent\sv@parindent%
+    \pre@kwd%
+    \hbox{\keywordname@size\keyword@name}\space\hskip.1pt}%
+
+  \gdef\endkeyword{\gdef\pre@kwd{\par\leavevmode}}
+
+  \let\pre@kwd\relax
+
+  \def\keyword@fmt{\ifcase\keyword@exist\else\safe@footnotetext{\the\keyword@toks}\fi}
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Put history as footnote
+\if@historyasfootnote
+
+  \def\history@fmt{%
+    \ifcase\history@exist\else%
+    \safe@footnotetext{%
+        \nobreak%
+        \history@style%
+        \history@size%
+        \leavevmode
+        \history@prefix
+        \ifx\@received\empty@data \else
+          \received@prefix\@received \received@postfix%
+        \fi
+        \ifx\@revised\empty@data \else
+          \revised@prefix\@revised \revised@postfix%
+        \fi
+        \ifx\@accepted\empty@data \else
+          \accepted@prefix\@accepted \accepted@postfix%
+        \fi
+        \history@postfix}%\par}%
+  \fi}
+
+
+
+
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Put address as footnote
+\if@addressasfootnote
+  \def\address@fmt[#1]#2{%
+     \ifx.#1.%
+       \safe@footnotetext{#2}
+     \else%
+       \usethankscounter{addressref}%
+       \bgroup
+         \def\\{\hfill\break}
+         \thankstext{#1}{#2}%
+       \egroup
+       \restorethankscounter%
+     \fi%
+                        }
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Put address at end
+\if@addressatend
+\def\address{\@ifnextchar[{\address@fmt}{\address@fmt[default]}}
+%
+% \def\address@ref@A=1
+% \newtoks\@address@1
+% \@address@1={#2}
+%
+\def\address@fmt[#1]#2{%
+  \stepcounter{address}%
+  \expandafter\protected@xdef\csname address@ref@#1\endcsname{\the\c@address}%
+  \expandafter\newtoks\csname @address@\the\c@address\endcsname
+  \expandafter\expandafter\expandafter\global\csname @address@\the\c@address\endcsname={#2}}
+
+\let\safe@phantomsection\@gobble
+
+% print address by number: \printaddressnum{1}
+\def\printaddressnum#1{%
+\xdef\@tmp{#1}%
+\bgroup
+\@ifundefined{@address@#1}{\@latex@error{Error: there are no address with number '#1'!}{??}}{
+  \address@size
+  \ifnum#1=1%
+    \safe@phantomsection{\addcontentsline{toc}{section}{Author's addresses}}%
+  \fi%
+  \begin{tabular}[t]{@{}l@{}}
+  \expandafter\expandafter\expandafter\the\csname @address@\@tmp\endcsname
+  \end{tabular}}
+\egroup
+}
+
+% print all addresses:
+\def\address@par{\par\vskip3pt}
+
+\def\printaddresses{%
+\vskip\address@skip%
+%\addcontentsline{toc}{section}{Author's addresses}%
+\def\last@right@glue{\par}%
+\ifodd\c@address   \def\last@right@glue{\hfill\hbox{}\address@par} \fi%
+\ifnum\c@address=1 \def\last@right@glue{\address@par}\fi%
+\@tempcnta=0%
+\bgroup\parindent\z@
+\@whilenum{\@tempcnta<\c@address}%
+  \do{%
+    \advance\@tempcnta\@ne
+    \ifodd\@tempcnta \def\left@glue{} \def\right@glue{} %     nelyginis
+       \else \def\left@glue{\hfill} \def\right@glue{\address@par}\fi % lyginis
+    \ifnum\@tempcnta=\c@address \let\left@glue\hfill \let\right@glue\last@right@glue\fi %paskutinis narys
+    \left@glue\expandafter\printaddressnum{\the\@tempcnta}\right@glue%
+     }
+\egroup
+}
+
+% invoke \printaddresses at end of document:
+\let\old@enddocument\enddocument
+\def\enddocument{\printaddresses\old@enddocument}
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Set up parameters for the IMS journals (AOP, AAP, AOS) layout:
+\if@imslayout
+
+  \setattribute{title}       {skip} {12\p@}
+  \setattribute{abstractname}{skip} {}
+  \setattribute{frontmatter} {cmd}  {\vskip20\p@ plus 3\p@ minus 3\p@}
+
+  \setattribute{abstract} {width}  {23pc}
+  \setattribute{abstract} {indent} {16pt} %2em
+
+  \setattribute{title}      {size} {\normalsize\bfseries\mathversion{bold}\spaceskip.5em}
+  \setattribute{author}     {size} {\normalsize\scshape}
+  \setattribute{affiliation}{size} {\normalsize\itshape}
+  \setattribute{address}    {size} {\scriptsize\scshape}
+  \setattribute{ead}        {size} {\upshape}
+  \setattribute{abstractname}{size}{\itshape}
+  \setattribute{keywordname}{size} {\itshape}
+  \setattribute{runninghead}{size} {\footnotesize}
+  \setattribute{pagenumber} {size} {\small}
+  \setattribute{copyright}  {size} {\fontsize{6}{7}\selectfont\raggedright}
+  \setattribute{thebibliography}{size}{\footnotesize}
+
+  \setattribute{dochead}    {case} {\MakeUppercase}
+  \setattribute{title}      {case} {\MakeUppercase}
+  \setattribute{runninghead}{case} {\MakeUppercase}
+
+  \setattribute{author}   {prefix} {By~}
+
+  \setattribute{copyright}  {text} {\url@fmt{}{\itshape}{\journal@name}{\journal@url}\break%
+                                    \@ifnonempty{\@copyrightyear\@volume\@issue\@pagerange\break}%
+                                    \doi@text}
+
+  \setattribute{email}      {text} {E-mail: }
+  \setattribute{url}        {text} {URL: }
+  \setattribute{fullurl}    {text} {URL: }
+  \def\volume#1{\gdef\@volume{Vol. #1, }}
+  \def\issue#1 {\gdef\@issue{No. #1, }}
+  \def\pubyear#1{\gdef\@pubyear{#1,}\gdef\@copyrightyear{#1 }}
+
+  \def\abstractname{}
+
+  \def\put@fmt@data{%
+    \copyright@fmt%
+    \history@fmt
+    \@thanks%
+    \keyword@fmt%
+    \abstract@fmt%
+    }
+
+  \def\contentsname@cmd{\specialsection*{\contentsname}}
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Set up parameters for the STS journal layout:
+
+\if@stslayout
+
+  \setattribute{frontmatter} {style} {\raggedright}
+  \setattribute{title}       {style} {\noindent\raggedright}
+  \setattribute{author}      {style} {\noindent\raggedright}
+  \setattribute{address}     {style} {\raggedright}
+
+  \setattribute{title}       {skip} {6\p@}
+  \setattribute{authors}     {skip} {10pt}
+  \setattribute{address}     {skip} {\z@}
+  \setattribute{abstract}    {skip} {36\p@}
+  \setattribute{abstractname}{skip} {. }
+  \setattribute{keyword}     {skip} {8\p@}
+
+  \setattribute{abstract}   {width}  {28pc}
+  \setattribute{keyword}    {width}  {28pc}
+
+  \setattribute{dochead}        {size} {\sffamily\Large\fontseries{bx}\selectfont\spaceskip.5em}
+  \setattribute{title}          {size} {\sffamily\fontseries{bx}\fontsize{24.88}{26}\selectfont\mathversion{bold}\spaceskip.5em}
+  \setattribute{author}         {size} {\sffamily\large\fontseries{bx}\selectfont}
+  \setattribute{address}        {size} {\normalfont\normalsize\itshape}
+  \setattribute{affiliation}    {size} {\small\mdseries}
+  \setattribute{ead}            {size} {}
+  \setattribute{abstract}       {size} {\normalsize\mdseries\upshape}
+  \setattribute{abstractname}   {size} {\itshape}
+  \setattribute{keyword}        {size} {\normalsize\mdseries\upshape}
+  \setattribute{keywordname}    {size} {\itshape}
+  \setattribute{thebibliography}{size} {\footnotesize}
+  \setattribute{copyright}      {size} {\normalfont\mdseries\fontsize{6}{7}\selectfont\raggedright}
+  \setattribute{runninghead}    {size} {\footnotesize}
+  \setattribute{runninghead}    {case} {\MakeUppercase}
+  \setattribute{pagenumber}     {size} {\small\bfseries}
+
+  \setattribute{keyword}         {KWD}{Key words and phrases:}
+
+% \printead:
+  \def\printead@fmt#1{(#1)}
+
+% all addresses are combined:  
+  \newtoks\address@toks
+
+  \def\address@exist{0}
+
+  \def\address{\@ifnextchar[{\@address}{\@address[]}}
+
+  \def\@address[#1]#2{
+    \gdef\address@exist{1}
+    \begingroup%
+      \no@harm%
+      \xdef\@act{\global\noexpand\address@toks{\the\address@toks#2\ }}\@act
+    \endgroup}
+
+  \def\address@fmt{\ifcase\address@exist\else\safe@footnotetext{\hskip-\parindent\address@style\address@size\the\address@toks}\fi}
+
+  \def\put@fmt@data{%
+    \copyright@fmt%
+    \address@fmt%
+    \@thanks%
+    \abstract@fmt%
+    \keyword@fmt%
+    \if@twocolumn%
+       \frontmatter@cmd%
+    \fi}
+
+  \def\firstpage@cmd{%
+    \if@twocolumn
+      \markboth{\@runauthor}{\@runtitle}%
+      \address@fmt%
+      \@thanks
+    \fi}
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Set up parameters for the BJ journal layout:
+
+\if@bjlayout
+
+  \setattribute{frontmatter} {style} {\raggedright}
+  \setattribute{title}       {style} {\noindent\raggedright}
+  \setattribute{author}      {style} {\noindent\raggedright}
+  \setattribute{address}     {style} {\raggedright}
+
+  \setattribute{title}       {skip} {10\p@}
+  \setattribute{abstract}    {skip} {16\p@}
+  \setattribute{abstractname}{skip} {}
+
+  \setattribute{abstract}   {width} {\textwidth}
+  \setattribute{keyword}    {width} {\textwidth}
+  \setattribute{history}    {width} {\textwidth}
+
+  \setattribute{dochead}    {size} {\normalsize\MakeUppercase}
+  \setattribute{title}      {size} {\fontsize{21}{26}\selectfont}
+  \setattribute{author}     {size} {\normalsize}
+  \setattribute{fnms}       {size} {\uppercase}
+  \setattribute{snm}        {size} {\uppercase}
+ 
+  \setattribute{address}    {size} {\small\itshape}
+  \setattribute{abstract}   {size} {\small\upshape}
+  \setattribute{keyword}    {size} {\small\upshape}
+  \setattribute{keywordname}{size} {\itshape}
+  \setattribute{history}    {size} {\raggedright\small\itshape}
+
+  \setattribute{runninghead}{size} {\normalsize\itshape}
+  \setattribute{pagenumber} {size} {\normalsize\upshape}
+  \setattribute{copyright}  {size} {\normalsize}
+  \setattribute{footline}   {size} {\footnotesize}
+
+  \setattribute{email}      {text} {E-mail:~}
+  \setattribute{copyright}  {text} {\url@fmt{}{\itshape}{\journal@name}{\journal@url}\ \textbf{\@volume}\@issue\@pubyear\ \@pagerange\\
+                                    \doi@text}
+  \setattribute{history}  {postfix} {}
+  \setattribute{revised}  {prefix}  { and revised~}
+
+  \setattribute{keyword}{KWD}{Keywords:}
+
+  \def\put@fmt@data{%
+    \copyright@fmt%
+    \@thanks%
+    \abstract@fmt%
+    \keyword@fmt%
+    \tableofcontents@fmt}
+
+    % invoke \printhistory at end of document:
+    \let\old@enddocument\enddocument
+    \def\enddocument{\history@fmt\old@enddocument}
+
+  \def\volume#1{\gdef\@volume{#1}}
+  \def\issue#1{\gdef\@issue{(#1)}}
+  \def\pubyear#1{\gdef\@pubyear{, #1, }\gdef\@copyrightyear{, #1, }}
+
+  \def\abstractname{}
+
+  \def\evenhead@fmt#1{\hfill#1}
+  \def\oddhead@fmt#1{#1\hfill}
+
+  \def\fnum@table{\tablename~\thetable.}
+
+  \long\def\@maketablecaption#1#2{%
+        \centering\footnotesize
+        \textbf{#1}\enskip #2\par
+    \vskip\belowcaptionskip}
+
+ \renewcommand\figurename{Figure}
+
+  \long\def\@makecaption#1#2{%
+    \vskip\abovecaptionskip
+    \footnotesize
+    \textbf{#1}. #2\par
+    \vskip\belowcaptionskip}
+
+
+\fi   
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Set up parameters for the AIHP journal layout:
+
+\if@aihplayout
+
+  % FRONT MATTER SKIPS
+  \setattribute{title}       {skip} {64\p@}
+  \setattribute{authors}     {skip} {14\p@}
+  \setattribute{address}     {skip} {12\p@}
+  \setattribute{abstractname}{skip} {.\enskip}
+  \setattribute{history}     {skip} {4\p@}
+  \setattribute{abstract}    {skip} {16\p@}
+
+  \setattribute{fline}       {cmd}  {\vskip22\p@
+                                     \hrule}
+  \setattribute{lline}       {cmd}  {\vskip10\p@
+                                     \hrule}
+
+  % FRONT MATTER DIMENSIONS
+  \setattribute{abstract}   {width} {\textwidth}
+  \setattribute{abstract}  {indent} {\z@} 
+  \setattribute{keyword}    {width} {\textwidth}
+  \setattribute{keyword}   {indent} {\z@} %
+
+  % FRONT MATTER FONTS 
+  \setattribute{title}      {size} {\huge}
+  \setattribute{author}     {size} {\Large}
+  \setattribute{abstract}   {size} {\small\upshape}
+  \setattribute{keywordname}{size} {\itshape}
+  \setattribute{thebibliography}{size}{\footnotesize}
+
+  \def\put@fmt@data{%
+    \copyright@fmt%
+    \@thanks%
+    \history@fmt
+    \fline@cmd%
+    \abstract@fmt%
+    \keyword@fmt%
+    \lline@cmd%
+    \tableofcontents@fmt}
+
+  \setattribute{keyword}{KWD}{Keywords:}
+  \setattribute{email}{text}{E-mail: }
+
+  \def\theaddressref{\alph{addressref}}
+  
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Set up parameters for the BJPS journal layout:
+
+\if@bjpslayout
+
+  \setattribute{keyword}{AMS}{AMS 2000 subject classifications.}
+  \setattribute{keyword}{KWD}{Keywords and phrases.}
+  
+  \setattribute{abstractname}{skip} {.\enskip}
+
+  \setattribute{title}      {size} {\Large\bfseries\mathversion{bold}}
+  \setattribute{address}    {size} {\scriptsize}
+  \setattribute{keywordname}{size} {\itshape}
+  \setattribute{runninghead}{size} {\footnotesize}
+  \setattribute{pagenumber} {size} {\small}
+  \setattribute{thebibliography}{size}{\footnotesize}
+
+  \setattribute{copyright}  {text} {\url@fmt{}{\itshape}{\journal@name}{\journal@url}\break%
+                                    \@ifnonempty{\@volume\@pubyear\@pagerange\break}%
+                                    \@ifnonempty{\journal@issn\break}%
+                                    \doi@text}%
+
+  \setattribute{email}  {text}{E-mail: }
+  \setattribute{url}    {text}{URL: }
+  \setattribute{fullurl}{text}{URL: }
+
+  \def\thethanks{\@arabic\c@thanks}
+  \def\theaddressref{\alph{addressref}}
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% smart \MR
+%% code suggested by Vilmos Prokaj <prokaj@cs.elte.hu>
+%% solves the problem when MR is in a format
+%%  \MR{MR1037262 (91i:60148)}
+
+%  without MR this macro removes the MR prefix if it
+%  is present unchange the argument otherwise
+\def\woMR#1{\w@MR#1MR#1MR\relax}%
+\def\w@MR#1MR#2MR#3\relax{#2}
+
+% this splits MR... (...)
+\def\@MR#1 #2\relax#3{%
+ \href{http://www.ams.org/mathscinet-getitem?mr=#1}%
+ {\MRfixed{#3}}}%
+
+\def\MRfixed{MR\woMR}%
+
+\let\MR\MRfixed
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% interaction with hyperref
+
+\def\test@hyperref{\@ifundefined{Hy@SetCatcodes}{}{\imsart@hyperref@settings}}
+
+\AtBeginDocument{\test@hyperref}
+
+\def\imsart@hyperref@settings{%
+%
+% hooks for the \thanksref, \thankstext:
+  \def\thankref@hyperlink##1{%
+     \edef\@tempx{##1thanks}%
+     \hbox{\hyperlink{##1}{\saferef{\@tempx}}}}
+  \def\thanks@hypertarget##1{\smash{\raise\baselineskip\hbox{\protect\hypertarget{##1}{}}}}
+% redefine pagenumbering
+  \let\pagenumbering\ims@pagenumbering
+% activate href
+   \let\ims@href\href%
+   \let\safe@phantomsection\phantomsection
+% put document info
+   \def\write@pdfinfo##1##2{\protected@write\@auxout{\no@harm}{\string\gdef\string##1{##2}}}
+   \@ifundefined{hy@title}{}{\pdfstringdef\@pdftitle{\hy@title}}
+   \@ifundefined{hy@author}{}{\pdfstringdef\@pdfauthor{\hy@author}}
+   \@ifundefined{hy@subject}{}{\pdfstringdef\@pdfsubject{\hy@subject}}
+   \@ifundefined{hy@keywords}{}{\pdfstringdef\@pdfkeywords{\hy@keywords}}
+%
+   \@ifundefined{user@hy@title}{}{\global\let\@pdftitle\user@hy@title}
+   \@ifundefined{user@hy@author}{}{\global\let\@pdfauthor\user@hy@author}
+   \@ifundefined{user@hy@subject}{}{\global\let\@pdfsubject\user@hy@subject}
+   \@ifundefined{user@hy@keywords}{}{\global\let\@pdfkeywords\user@hy@keywords}
+%
+% MathSciNet:
+%   \def\MR##1{\href{http://www.ams.org/mathscinet-getitem?mr=##1}{MR##1}}
+
+   %% MR with hyperef
+   \def\MR##1{\@MR##1 \relax{##1}}%
+
+
+%   \@ifundefined{Hy@SetCatcodes}{\let\MR\MRfixed}{\relax}%
+
+}
+
+\def\write@pdfinfo#1#2{}
+
+\newtoks\authors@list
+\def\addto@authors@list#1{%
+  \begingroup%
+    \no@harm%
+    \xdef\@act{\global\noexpand\authors@list{\the\authors@list#1}}\@act%
+  \endgroup}
+
+\newtoks\keywords@list
+\def\addto@keywords@list#1{%
+  \begingroup%
+    \no@harm%
+    \xdef\@act{\global\noexpand\keywords@list{\the\keywords@list#1}}\@act%
+  \endgroup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION, SUBSECTION ETC.
+% we do not like article appearance:
+
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+                                   {-\bigskipamount}%
+                                   {\medskipamount}%
+                                   {\raggedright\bfseries\mathversion{bold}}}
+
+\renewcommand\subsection{\@startsection {subsection}{2}{\z@}%
+                                   {-\bigskipamount}%
+                                   {\medskipamount}%
+                                   {\raggedright\bfseries\itshape\mathversion{bold}}}
+
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                                   {-\bigskipamount}%
+                                   {\medskipamount}%
+                                   {\raggedright\itshape}}
+
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                   {\medskipamount}%
+                                   {-1em}%
+                                   {\bfseries}}
+
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\z@}%
+                                   {\medskipamount}%
+                                   {-1em}%
+                                   {\itshape}}
+
+
+% Format for the counter:
+\def\section@numbersep{.}
+\def\subsection@numbersep{.}
+\def\subsubsection@numbersep{.}
+\def\paragraph@numbersep{.}
+\def\subparagraph@numbersep{.}
+
+\def\@seccntformat#1{{\csname #1@prefix\endcsname\csname the#1\endcsname\csname#1@numbersep\endcsname\enspace}}
+
+
+\let\specialsection\section
+
+\@namedef{specialsection*}{\section*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% sections: bjpslayout
+
+\if@bjpslayout
+
+  \renewcommand\section{\@startsection {section}{1}{\z@}%
+                                   {-\bigskipamount}%
+                                   {\medskipamount}%
+                                   {\large\bfseries\mathversion{bold}\raggedright}}
+
+  \renewcommand\subsection{\@startsection {subsection}{2}{\z@}%
+                                   {-\medskipamount}%
+                                   {\smallskipamount}%
+                                   {\bfseries\mathversion{bold}\raggedright}}
+
+  \renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                                     {\medskipamount}%
+                                     {-10pt}%
+                                     {\normalsize\itshape}}
+
+  \def\subsubsection@prefix{\upshape}
+
+  \def\section@numbersep{}
+  \def\subsection@numbersep{}
+  \def\subsubsection@numbersep{}
+  \def\paragraph@numbersep{}
+  \def\subparagraph@numbersep{}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% sections: IMS layout
+
+\if@imslayout
+  \renewcommand\section{\@startsection {section}{1}{\parindent}%
+                                     {\medskipamount}%
+                                     {-10pt}%
+                                     {\normalsize\upshape\bfseries\mathversion{bold}}}
+
+  \renewcommand\subsection{\@startsection {subsection}{2}{\parindent}%
+                                     {\medskipamount}%
+                                     {-10pt}%
+                                     {\subsection@shape}}
+  \def\subsection@shape{\normalsize\itshape}
+  \def\subsection@prefix{\upshape}
+
+  \renewcommand\subsubsection{\@startsection{subsubsection}{3}{\parindent}%
+                                       {\medskipamount}%
+                                       {-10pt}%
+                                       {\normalsize\itshape}}
+  \def\subsubsection@prefix{\upshape}
+
+  \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                      {\smallskipamount}%
+                                      {-1em}%
+                                      {\normalsize\itshape}}
+  \renewcommand\subparagraph{\@startsection{subparagraph}{5}{\z@}%
+                                         {0.1pt}%
+                                         {-1em}%
+                                         {\normalsize\itshape}}
+
+% must be used for the appendix \section and \thebibliography
+  \renewcommand\specialsection{\@startsection {section}{1}{\z@}%
+                                   {\medskipamount}%
+                                   {\smallskipamount}%
+                                   {\normalsize\centering\MakeUppercase}}
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% sections: STS layout
+
+\if@stslayout
+
+  \def\sec@raggedright{%
+    \def\\{\hfill\break}\@rightskip\@flushglue \rightskip\@rightskip
+    \leftskip\z@skip
+    \parindent\z@}
+
+% last line will centered to page width
+
+  \def\fl@hangfrom#1{\noindent {#1}}
+  \def\TO@fl{\let\@hangfrom\fl@hangfrom}
+
+
+  \renewcommand\section{\@startsection {section}{1}{\z@}%
+                                     {\medskipamount}%
+                                     {\smallskipamount}%
+                                     {\centering\TO@fl\normalsize\sffamily\fontseries{bx}\selectfont\mathversion{bold}\MakeUppercase}}
+
+  \renewcommand\subsection{\@startsection {subsection}{2}{\z@}%
+                                     {\smallskipamount}%
+                                     {\smallskipamount}%
+                                     {\normalsize\sffamily\fontseries{bx}\selectfont\mathversion{bold}\sec@raggedright}}
+
+  \renewcommand\subsubsection{\@startsection{subsubsection}{3}{\parindent}%
+                                       {\smallskipamount}%
+                                       {-.5em}%
+                                       {\normalsize\itshape}}
+
+  \renewcommand\paragraph{\@startsection{paragraph}{4}{\parindent}%
+                                      {\z@}%
+                                      {-4pt}%
+                                      {\normalsize\itshape}}
+
+  \renewcommand\subparagraph{\@startsection{subparagraph}{5}{\z@}%
+                                         {0.1pt}%
+                                         {-1em}%
+                                         {\normalsize\itshape}}
+
+% must be used for the \thebibliography
+  \renewcommand\specialsection{\@startsection {section}{1}{\z@}%
+                                   {\bigskipamount}%
+                                   {\smallskipamount}%
+                                   {\normalsize\centering\MakeUppercase}}
+
+% Format for the counter:
+  \def\section@numbersep{.}
+  \def\subsection@numbersep{}
+  \def\subsubsection@numbersep{}
+  \def\paragraph@numbersep{}
+  \def\subparagraph@numbersep{}
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% sections: BJ layout
+
+\if@bjlayout
+
+  \renewcommand\section{\@startsection {section}{1}{\z@}%
+                                     {-\bigskipamount}%
+                                     {\medskipamount}%
+                                     {\Large\bfseries\mathversion{bold}\raggedright}}
+
+  \renewcommand\subsection{\@startsection {subsection}{2}{\z@}%
+                                     {-\bigskipamount}%
+                                     {\medskipamount}%
+                                     {\large\bfseries\mathversion{bold}\raggedright}}
+
+  \renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                                     {-\medskipamount}%
+                                     {\smallskipamount}%
+                                     {\itshape\raggedright}}
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% sections: AIHP layout
+
+\if@aihplayout
+
+  \renewcommand\subsection{\@startsection {subsection}{2}{\z@}%
+                                     {-\medskipamount}%
+                                     {\medskipamount}%
+                                     {\itshape\raggedright}}
+
+  \renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                                     {-\medskipamount}%
+                                     {.01\p@}%
+                                     {\itshape\raggedright}}
+
+  \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                     {\medskipamount}%
+                                     {-10pt}%
+                                     {\itshape}}
+
+  \renewcommand\subparagraph{\@startsection{subparagraph}{5}{\parindent}%
+                                     {0.1pt}%
+                                     {-1em}%
+                                     {\itshape}}
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \thanksref will not print "??" if label is undefined
+
+\if@noundefthanksref
+
+   \AtBeginDocument{\let\sv@thankref@hyperlink\thankref@hyperlink}%
+
+   \def\thanksref@hook{%
+       \@ifundefined{r@\@tempb thanks}{%
+          \let\thankref@hyperlink\@gobble%
+          \let\@tempa\@empty}%
+          {\let\thankref@hyperlink\sv@thankref@hyperlink}%
+   }
+
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% loading of amsmath
+
+\def\set@amsthm{
+                 \def\ims@thmshape{0}
+  \if@imslayout  \def\ims@thmshape{1}\fi
+  \if@stslayout  \def\ims@thmshape{1}\fi
+  \if@bjlayout   \def\ims@thmshape{2}\fi
+  \if@aihplayout \def\ims@thmshape{3}\fi
+  \if@bjpslayout \def\ims@thmshape{3}\fi
+
+  \ifcase\ims@thmshape
+  \or %1
+     \thm@notefont{\upshape}
+     \newtheoremstyle{plain}     {\medskipamount}{\medskipamount}{\itshape}{\parindent}{\scshape}{.}{1em}{}
+     \newtheoremstyle{definition}{\medskipamount}{\medskipamount}{\normalfont}{\parindent}{\scshape}{.}{1em}{}
+     \newtheoremstyle{remark}    {\medskipamount}{\medskipamount}{\normalfont}{\parindent}{\scshape}{.}{1em}{}
+
+     \renewenvironment{proof}[1][\proofname]{\par
+       \pushQED{\qed}%
+       \normalfont \topsep\medskipamount%
+       \trivlist
+       \labelsep.5em%
+       \item[\hskip\labelsep\hskip\parindent
+       \scshape ##1\@addpunct{.}]\ignorespaces
+     }{%
+       \popQED\endtrivlist\@endpefalse
+     }
+  \or %2
+
+     \newtheoremstyle{plain}     {\medskipamount}{\medskipamount}{\itshape}{\z@}{\bfseries}{.}{1em}{}
+     \newtheoremstyle{definition}{\medskipamount}{\medskipamount}{\itshape}{\z@}{\bfseries\itshape}{.}{1em}{}
+     \newtheoremstyle{remark}    {\medskipamount}{\medskipamount}{\normalfont}{\z@}{\bfseries\itshape}{.}{1em}{}
+
+    \renewenvironment{proof}[1][\proofname]{\par
+      \pushQED{\qed}%
+      \normalfont \topsep\medskipamount\relax
+      \trivlist
+      \item[\hskip\labelsep
+            \itshape\bfseries
+        ##1\@addpunct{.}]\ignorespaces
+    }{%
+      \popQED\endtrivlist\@endpefalse
+    }
+
+
+  \or %3
+
+    \renewenvironment{proof}[1][\proofname]{\par
+      \pushQED{\qed}%
+      \normalfont \topsep\medskipamount\relax
+      \trivlist
+      \item[\hskip\labelsep
+            \bfseries
+        ##1\@addpunct{.}]\ignorespaces
+    }{%
+      \popQED\endtrivlist\@endpefalse
+    }
+
+  \else
+  \fi}
+
+
+\if@load@amsmath
+  \if@amsmath@leqno
+     \PassOptionsToPackage{leqno}{amsmath}
+  \fi
+  \RequirePackage[cmex10]{amsmath}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% loading of amsthm 
+
+\if@load@amsthm
+  \RequirePackage{amsthm} 
+  \set@amsthm
+\else
+  \AtBeginDocument{\@ifpackageloaded{amsthm}{\set@amsthm}{}}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% thebibliography, loading natbib
+
+%%% \citefix -- fixes \NAT@citex (to make a hyperlink from year component in cite command).
+\def\citefix{%
+  \def\NAT@citex%
+    [##1][##2]##3{%
+    \NAT@sort@cites{##3}%
+    \let\@citea\@empty
+    \@cite{\let\NAT@nm\@empty\let\NAT@year\@empty
+      \@for\@citeb:=\NAT@cite@list\do
+      {\edef\@citeb{\expandafter\@firstofone\@citeb}%
+       \if@filesw\immediate\write\@auxout{\string\citation{\@citeb}}\fi
+       \@ifundefined{b@\@citeb\@extra@b@citeb}{\@citea%
+         {\reset@font\bfseries ?}\NAT@citeundefined
+                   \PackageWarning{natbib}%
+         {Citation `\@citeb' on page \thepage \space undefined}\def\NAT@date{}}%
+       {\let\NAT@last@nm=\NAT@nm\let\NAT@last@yr=\NAT@year
+       \NAT@parse{\@citeb}%
+        \ifNAT@longnames\@ifundefined{bv@\@citeb\@extra@b@citeb}{%
+          \let\NAT@name=\NAT@all@names
+          \global\@namedef{bv@\@citeb\@extra@b@citeb}{}}{}%
+        \fi
+       \ifNAT@full\let\NAT@nm\NAT@all@names\else
+         \let\NAT@nm\NAT@name\fi
+       \ifNAT@swa\ifcase\NAT@ctype
+         \if\relax\NAT@date\relax
+           \@citea\NAT@nmfmt{\NAT@nm}%
+           \hyper@natlinkstart{\@citeb\@extra@b@citeb}%
+           \NAT@date\hyper@natlinkend
+         \else
+           \ifx\NAT@last@nm\NAT@nm\NAT@yrsep
+              \ifx\NAT@last@yr\NAT@year
+                \hyper@natlinkstart{\@citeb\@extra@b@citeb}\NAT@exlab
+                \hyper@natlinkend
+              \else\unskip\
+                \hyper@natlinkstart{\@citeb\@extra@b@citeb}\NAT@date
+                \hyper@natlinkend
+              \fi
+           \else
+             \@citea\NAT@nmfmt{\NAT@nm}%
+             \NAT@aysep\ 
+             \hyper@natlinkstart{\@citeb\@extra@b@citeb}%
+             \NAT@date\hyper@natlinkend
+           \fi
+         \fi
+       \or\@citea\hyper@natlinkstart{\@citeb\@extra@b@citeb}%
+           \NAT@nmfmt{\NAT@nm}\hyper@natlinkend
+       \or\@citea\hyper@natlinkstart{\@citeb\@extra@b@citeb}%
+           \NAT@date\hyper@natlinkend
+       \or\@citea\hyper@natlinkstart{\@citeb\@extra@b@citeb}%
+           \NAT@alias\hyper@natlinkend
+       \fi \def\@citea{\NAT@sep\ }%
+       \else\ifcase\NAT@ctype
+          \if\relax\NAT@date\relax
+            \@citea\hyper@natlinkstart{\@citeb\@extra@b@citeb}%
+            \NAT@nmfmt{\NAT@nm}\hyper@natlinkend
+          \else
+          \ifx\NAT@last@nm\NAT@nm\NAT@yrsep
+              \ifx\NAT@last@yr\NAT@year
+                \hyper@natlinkstart{\@citeb\@extra@b@citeb}\NAT@exlab
+                \hyper@natlinkend
+              \else\unskip\
+                \hyper@natlinkstart{\@citeb\@extra@b@citeb}\NAT@date
+                \hyper@natlinkend
+              \fi
+           \else
+             \@citea\NAT@nmfmt{\NAT@nm}%
+             \ \NAT@@open\if*##1*\else##1\ \fi
+             \hyper@natlinkstart{\@citeb\@extra@b@citeb}%
+             \NAT@date\hyper@natlinkend\fi
+          \fi
+         \or\@citea\hyper@natlinkstart{\@citeb\@extra@b@citeb}%
+           \NAT@nmfmt{\NAT@nm}\hyper@natlinkend
+         \or\@citea\hyper@natlinkstart{\@citeb\@extra@b@citeb}%
+           \NAT@date\hyper@natlinkend
+         \or\@citea\hyper@natlinkstart{\@citeb\@extra@b@citeb}%
+           \NAT@alias\hyper@natlinkend
+         \fi \if\relax\NAT@date\relax\def\@citea{\NAT@sep\ }%
+             \else\def\@citea{\NAT@@close\NAT@sep\ }\fi
+       \fi
+       }}\ifNAT@swa\else\if*##2*\else\NAT@cmt##2\fi
+       \if\relax\NAT@date\relax\else\NAT@@close\fi\fi}{##1}{##2}}%
+  \let\@citex\NAT@citex
+}
+
+
+\def\set@natbib{%
+  \if@linksfromyear \citefix \fi
+  \let\bibfont\thebibliography@size
+  \setlength\bibsep{0pt}}
+
+\if@load@natbib
+   \RequirePackage{natbib}
+   \set@natbib
+\else 
+  \let\xxx@thebibliography\thebibliography
+  \def\thebibliography{\thebibliography@size\xxx@thebibliography}
+  \g@addto@macro\@openbib@code{\itemsep\z@}
+  \AtBeginDocument{\@ifpackageloaded{natbib}{\set@natbib}{}}
+\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% thebibliography - structured
+
+%%%%%%%%% Common macros:
+
+% Setting a "style" for a command:
+% \set@bibl@cmd{bvolume}  == \def\bvolume#1{{\bvolume@style #1}}
+
+\def\set@bibl@cmd#1{\expandafter\def\csname #1\endcsname##1{{\csname #1@style\endcsname##1}}}
+
+\let\endbibitem\relax
+
+%%%%%%%%% bauthor, beditor
+
+\def\bbl@bauthor#1{%
+  \csname bauthor@hook\endcsname%
+{%
+  \let\binits\@firstofone%
+  \let\bsnm\@firstofone%
+  \let\bfnm\@gobble%
+  \let\bparticle\@firstofone%
+  \let\bsuffix\@firstofone%
+  \bauthor@style%
+#1}}
+
+\def\bbl@beditor#1{{%
+  \let\binits\@firstofone%
+  \let\bsnm\@firstofone%
+  \let\bfnm\@gobble%
+  \let\bparticle\@firstofone%
+  \let\bsuffix\@firstofone%
+  \beditor@style%
+#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% bid
+% \bid{MR={},doi={},...}
+
+\define@key{bid}{mr}{\MR{#1}}
+\define@key{bid}{doi}{}
+\define@key{bid}{pubmed}{}
+\define@key{bid}{pii}{}
+\define@key{bid}{issn}{}
+
+\def\bbl@bid#1{%
+       \setkeys{bid}{#1}%
+}
+
+% for compatibility with old bibtex style
+\def\bdoi#1{\ignorespaces}
+
+%%%%%%%%% common@pub@types
+
+\def\common@pub@types{%
+  \def\AND{and }%
+  \let\betal\@firstofone%
+  \set@bibl@cmd{btitle}%
+  \let\byear\@firstofone%  
+  \let\bpages\@firstofone%
+  \let\bmisc\@firstofone%
+  \let\bnote\@firstofone%
+  \let\banumber\@firstofone%
+  \let\bmrnumber\MR%
+  \let\bid\bbl@bid%
+  \set@bibl@cmd{bvolume}%
+  \csname common@pub@types@hook\endcsname%
+}
+
+
+%%%%%%%%% default stiliai
+
+  \setattribute{bauthor}{style}{\scshape}
+  \setattribute{beditor}{style}{\scshape}
+
+  \setattribute{bjournal}  {style}{\itshape}
+  \setattribute{bbooktitle}{style}{\itshape}
+  \setattribute{bseries}   {style}{\itshape}
+
+  \setattribute{bvolume}   {style}{\bfseries}
+
+%%%%%%%%%  barticle
+
+\def\barticle{\@ifnextchar[{\@barticle}{\@barticle[]}}
+
+\def\@barticle[#1]{%
+  \common@pub@types%
+  \let\bauthor\bbl@bauthor%
+  \set@bibl@cmd{bjournal}%
+}
+
+%%%%%%%%% bbook
+
+\def\bbook{\@ifnextchar[{\@bbook}{\@bbook[]}}
+
+\def\@bbook[#1]{%
+  \common@pub@types%
+  \let\bauthor\bbl@bauthor%
+  \let\beditor\bbl@beditor%
+  \let\bedition\@firstofone%
+  \set@bibl@cmd{bseries}%
+  \let\bpublisher\@firstofone%
+  \let\baddress\@firstofone%
+  \let\blocation\@firstofone%
+  \let\bisbn\@gobble%
+%
+  \let\btitle@style\itshape%
+}
+
+
+%%%%%%%%% bincollection
+
+\def\bincollection{\@ifnextchar[{\@bincollection}{\@bincollection[]}}
+
+\def\@bincollection[#1]{%
+  \common@pub@types%
+  \let\bauthor\bbl@bauthor%
+  \let\beditor\bbl@beditor%
+  \set@bibl@cmd{bbooktitle}%
+  \let\bchapter\@firstofone%
+  \let\bedition\@firstofone%
+  \set@bibl@cmd{bseries}%
+  \let\bpublisher\@firstofone%
+  \let\baddress\@firstofone%
+  \let\blocation\@firstofone%
+  \let\bisbn\@gobble%
+  \def\bauthor@hook{\let\beditor@style\relax}
+}
+
+%%%%%%%%% binproceedings
+
+\def\binproceedings{\@ifnextchar[{\@binproceedings}{\@binproceedings[]}}
+
+\def\@binproceedings[#1]{%
+  \common@pub@types%
+  \let\bauthor\bbl@bauthor%
+  \let\beditor\bbl@beditor%
+  \set@bibl@cmd{bbooktitle}%
+  \set@bibl@cmd{bseries}%
+  \let\borganization\@firstofone%
+  \let\bpublisher\@firstofone%
+  \let\baddress\@firstofone%
+  \let\blocation\@firstofone%
+  \let\bisbn\@gobble%
+}
+
+%%%%%%%%% binbook
+
+\def\binbook{\@ifnextchar[{\@binbook}{\@binbook[]}}
+
+\def\@binbook[#1]{%
+  \common@pub@types%
+  \let\bauthor\bbl@bauthor%
+  \let\beditor\bbl@beditor%
+  \set@bibl@cmd{bbooktitle}%
+  \let\bchapter\@firstofone%
+  \let\bedition\@firstofone%
+  \set@bibl@cmd{bseries}%
+  \let\bpublisher\@firstofone%
+  \let\baddress\@firstofone%
+  \let\blocation\@firstofone%
+  \let\bisbn\@gobble%
+%
+  \let\btitle@style\itshape
+}
+
+
+%%%%%%%%% bproceedings
+
+\def\bproceedings{\@ifnextchar[{\@bproceedings}{\@bproceedings[]}}
+
+\def\@bproceedings[#1]{%
+  \common@pub@types%
+  \let\bauthor\bbl@bauthor%
+  \let\beditor\bbl@beditor%
+  \let\bedition\@firstofone%
+  \set@bibl@cmd{bseries}%
+  \let\bpublisher\@firstofone%
+  \let\borganization\@firstofone%
+  \let\baddress\@firstofone%
+  \let\blocation\@firstofone%
+  \let\bisbn\@gobble%
+%
+  \let\btitle@style\itshape
+}
+
+
+%%%%%%%%% btechreport
+
+\def\btechreport{\@ifnextchar[{\@btechreport}{\@btechreport[]}}
+
+\def\@btechreport[#1]{%
+  \common@pub@types%
+  \let\bauthor\bbl@bauthor%
+  \let\btype\@firstofone%
+  \let\bnumber\@firstofone%
+  \let\binstitution\@firstofone%
+  \let\bpublisher\@firstofone%
+  \let\baddress\@firstofone%
+  \let\blocation\@firstofone%
+}
+
+%%%%%%%%% bmanual
+
+\def\bmanual{\@ifnextchar[{\@bmanual}{\@bmanual[]}}
+
+\def\@bmanual[#1]{%
+  \common@pub@types%
+  \let\bauthor\bbl@bauthor%
+  \let\bedition\@firstofone%
+  \let\borganization\@firstofone%
+  \let\bpublisher\@firstofone%
+  \let\baddress\@firstofone%
+  \let\blocation\@firstofone%
+  \let\bisbn\@gobble%
+}
+
+%%%%%%%%% mastersthesis
+
+\def\bmastersthesis{\@ifnextchar[{\@bmastersthesis}{\@bmastersthesis[]}}
+
+\def\@bmastersthesis[#1]{%
+  \common@pub@types%
+  \let\bauthor\bbl@bauthor%
+  \let\bschool\@firstofone%
+  \let\bpublisher\@firstofone%
+  \let\btype\@firstofone%
+  \let\baddress\@firstofone%
+  \let\blocation\@firstofone%
+}
+
+%%%%%%%%% phdthesis
+
+\def\bphdthesis{\@ifnextchar[{\@bphdthesis}{\@bphdthesis[]}}
+
+\def\@bphdthesis[#1]{%
+  \common@pub@types%
+  \let\bauthor\bbl@bauthor%
+  \let\bpublisher\@firstofone%
+  \let\bschool\@firstofone%
+  \let\btype\@firstofone%
+  \let\baddress\@firstofone%
+  \let\blocation\@firstofone%
+}
+
+%%%%%%%%% bbooklet
+
+\def\bbooklet{\@ifnextchar[{\@bbooklet}{\@bbooklet[]}}
+
+\def\@bbooklet[#1]{%
+  \common@pub@types%
+  \let\bauthor\bbl@bauthor%
+  \let\bhowpublished\@firstofone%
+  \let\baddress\@firstofone%
+  \let\blocation\@firstofone%
+}
+
+%%%%%%%%% bunpublished
+
+\def\bunpublished{\@ifnextchar[{\@bunpublished}{\@bunpublished[]}}
+
+\def\@bunpublished[#1]{%
+  \common@pub@types%
+  \let\bauthor\bbl@bauthor%
+}
+
+%%%%%%%%% bmisc
+
+\def\bmisc{\@ifnextchar[{\@bmisc}{\@bmisc[]}}
+
+\def\@bmisc[#1]{%
+  \common@pub@types%
+  \let\bauthor\bbl@bauthor%
+  \let\bhowpublished\@firstofone%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \bptok
+
+\def\bptok#1{\ignorespaces}
+
+\ifx\OrigBibText\undefined \long\def\OrigBibText#1\endOrigBibText{}\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% appendix
+
+\if@imslayout
+
+% appendix mess up everything in this layout:
+
+  \renewcommand\appendix{\par
+    \def\subsection@shape{\normalsize\upshape\bfseries\mathversion{bold}}
+    \let\section\specialsection
+    \def\section{\@ifnextchar*{\@appsectionstar}{\@appsectionnostar}}%
+    \def\section@prefix{\appendixname\ }%
+    \def\section@numbersep{:}%
+    \setcounter{section}{0}%
+    \setcounter{subsection}{0}%
+    \gdef\thesection{\@Alph\c@section}}
+
+% \section*{Appendix} -> APPENDIX
+  \def\@appsectionstar*#1{%
+     \specialsection*{#1}%
+     \setcounter{section}{1}%
+%     \addcontentsline{toc}{section}{#1}
+}
+
+% \section{}      -> APPENDIX A
+% \section{proof} -> APPENDIX A: PROOF
+  \def\@appsectionnostar#1{%
+     \ifx.#1.% 
+       \def\section@numbersep{}\specialsection[\appendixname\ \thesection]{}%
+     \else%
+       \def\section@numbersep{:}\specialsection{#1}%
+     \fi}
+
+%  dirty trick with \thebibliography
+  \let\old@thebibliography\thebibliography
+  \def\thebibliography{\let\section\specialsection\old@thebibliography}
+
+\else
+
+  \renewcommand\appendix{\par
+    \let\old@section\section%
+    \def\section{\@ifnextchar*{\@appsectionstar}{\@appsectionnostar}}%
+    \def\section@prefix{\appendixname\ }%
+    \def\section@numbersep{:}%
+    \setcounter{section}{0}%
+    \setcounter{subsection}{0}%
+    \gdef\thesection{\@Alph\c@section}}
+
+  \def\@appsectionstar*#1{%
+     \old@section*{#1}%
+     \setcounter{section}{1}%
+%     \addcontentsline{toc}{section}{#1}
+}
+
+  \def\@appsectionnostar#1{%
+     \ifx.#1.% 
+       \def\section@numbersep{}\old@section[\appendixname\ \thesection]{}%
+     \else%
+       \def\section@numbersep{:}\old@section{#1}%
+     \fi}
+
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% supplement
+%
+%\begin{supplement}[id=suppA]
+%  \sname{Supplement A}
+%  \stitle{}
+%  \slink[doi]{}
+%  \slink[url]{http://lib.stat.cmu.edu/aoas/???/???}
+%  \sdatatype{.zip}
+%  \sfilename{foo.zip}
+%  \sdescription{}
+%\end{supplement}
+% \thesuppdoi{suppA}
+% \ref{suppA}
+% \hyperlink{suppA}{text}
+
+\def\supplement@name{Supplementary Material}
+
+\def\sname#1{\def\@sname{#1}\def\@currentlabel{#1}}
+\def\stitle#1{\def\@stitle{#1}}
+\def\sdatatype#1{\def\@sdatatype{#1}}
+\def\sfilename#1{}
+\def\slink[#1]#2{\expandafter\def\csname slink@#1\endcsname{#2}}
+\def\sdescription#1{\def\@sdescription{#1}}
+
+\def\suppsection@fmt{\specialsection*{\supplement@name}}
+
+\def\slink@doi@fmt{%
+  \url@fmt{doi: }{}{\slink@doi}{\doi@base\slink@doi}%
+  \@ifundefined{supp@label}{}{%
+    \expandafter\xdef\csname\supp@label @doi\endcsname{\slink@doi}%
+    \expandafter\xdef\csname\supp@label @url\endcsname{\doi@base\slink@doi}}%
+}
+
+\def\slink@url@fmt{%
+  \url@fmt{}{}{\slink@url}{\slink@url}%
+  \@ifundefined{supp@label}{}{%
+     \expandafter\xdef\csname\supp@label @url\endcsname{\slink@url}}%
+}
+
+\def\thesuppdoi#1{\@ifundefined{#1@doi}%
+  {\@latex@error{Undefined supplement id=#1}{??}}%
+  {\def\@tempx{\csname #1@doi\endcsname}%
+   \@ifundefined{#1@url}{\def\@tempy{\doi@base\csname #1@url\endcsname}}{\def\@tempy{\csname #1@url\endcsname}}%
+   \url@fmt{DOI: }{}{\@tempx}{\@tempy}}%
+}
+
+\define@key{supplement}{id}{\def\supp@label{#1}}
+
+\long\def\supplement{\@ifnextchar[{\@supplement}{\@supplement[]}}
+
+\long\def\@supplement[#1]{%
+  \suppsection@fmt%
+  \global\let\suppsection@fmt\smallskip%
+  \setkeys{supplement}{#1}%
+}
+
+\def\endsupplement{%
+  \@ifundefined{@sname}{}{\@ifundefined{supp@label}{}{\hypertarget{\supp@label}{}\label{\supp@label}}\textbf{\@sname: }}%
+  \@ifundefined{@stitle}{}{\textbf{\@stitle\ }}%
+%
+  \\
+  (%
+  \@ifundefined{slink@doi}{}{\slink@doi@fmt}%
+  \@ifundefined{slink@url}{}{\slink@url@fmt}%
+  \@ifundefined{@sdatatype}{}{; \@sdatatype}%
+  ).
+  \@ifundefined{@sdescription}{}{\@sdescription}%
+  \par}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TOC in "article" class is a mess:
+
+
+% for hyperref
+\def\toclevel@title{0}
+
+\newcommand*\l@title[2]{}
+\newcommand*\l@author[2]{}
+\newcommand*\l@doi[2]{}
+\newcommand*\l@arxiv[2]{}
+\newcommand*\l@jobname[2]{}
+\newcommand*\l@begintocitem[2]{}
+\newcommand*\l@endtocitem[2]{}
+
+\newif\if@changetoc  \@changetocfalse
+\@ifclassloaded{article}{\@changetoctrue}{}
+
+\if@changetoc
+
+  \@ifundefined{contentsname@cmd}{\def\contentsname@cmd{\section*{\contentsname}}}{}
+
+  \renewcommand\tableofcontents{%
+      \nocontentsline
+      \contentsname@cmd%
+      \@starttoc{toc}%
+      }
+
+  \renewcommand*\l@section{\@dottedtocline{1}{\z@}{1.5em}}
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% number lines
+
+\ifnumberlines@
+
+   \long\def\l@addto@macro#1#2{%
+       \toks@\expandafter{#1#2}%
+       \edef#1{\the\toks@}}
+
+   \setattribute{numberlines}{size}{\scriptsize\ttfamily}
+   \setattribute{numberlines}{skip}{24\p@}
+
+   \def\numberlines@hook{%
+       \l@addto@macro\@evenhead\put@numberlines@box%
+       \l@addto@macro\@oddhead\put@numberlines@box}
+
+   \g@addto@macro\ps@imsheadings\numberlines@hook
+   \g@addto@macro\ps@copyright\numberlines@hook
+
+   \newbox\numberlines@box
+   \newskip\numberlines@box@skip
+
+   \def\set@numberlines@box{%
+     \setlength\numberlines@box@skip\headsep
+     \addtolength\numberlines@box@skip{5\p@}
+   %
+     \setbox\numberlines@box\vtop to\textheight{%
+       \parindent\z@    
+       \vskip\z@   
+       \@tempcnta=0
+       \@tempdima=\z@
+       \loop
+         \advance\@tempcnta by1
+         \advance\@tempdima by\baselineskip
+         \hbox to\textwidth{%
+            \llap{\numberlines@size\the\@tempcnta\kern\numberlines@skip}
+            \hfill
+            \rlap{\numberlines@size\kern\numberlines@skip\the\@tempcnta}}
+       \ifdim\@tempdima<\textheight\repeat
+       \vss
+     }%
+   %
+       \ht\numberlines@box\z@
+       \dp\numberlines@box\z@
+   }
+
+   \def\put@numberlines@box{\lower\numberlines@box@skip\hbox to\z@{\hss\copy\numberlines@box}}
+
+   \AtBeginDocument{\set@numberlines@box}
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INICIALIZATION
+
+% Read local configuration file (if exist):
+% imsart.cnf imsart-ps.cnf imsart-lnms.cnf
+
+\@input{\imsfmt@name\journal@id.cnf}
+
+
+\@twosidetrue
+\pagenumbering{arabic}
+\frenchspacing
+\init@settings
+\pagestyle{imsheadings}
+
+\endinput
+%%
+%% History:
+2014.10.16 - added \qq{} 
+2014.10.13 - added \OrigBibText and \endOrigBibText 
+2014.07.30 - removed \raggedright from \relateddois 
+2014.07.23 - added \relateddoi and \relateddois
+2014.02.20 - "Submitted to the Bernoulli" changed to "Submitted to Bernoulli"; 
+2014.01.08 - "Submitted to the Statistical Science" changed to "Submitted to Statistical Science"; 
+2013.05.28 - keyword key MSC added (MSC 2010 subject classifications:);
+2013.03.06 - added \bpublisher for the \bmanual entry;
+2012.08.31 - bug fix in stslayout;
+2012.08.16 - added new bibliography commands;
+2012.04.10 - bug fix in stslayout;
+2010.03.13 - new option linksfromyear (makes a hyperlink only from year component of the cite command);
+2012.02.28 - SSY - references layout changed;
+2012.02.07 - new option noundefthanksref (SSY journal);
+2011.12.06 - empty command \sfilename added;
+2011.12.01 - when \title is centered, \\ is defined as \break;
+2011.11.28 - bugfix in \title command;
+           - \thanksref made robust;
+2011.11.15 - small fixes related to the webbib tagging;
+2011.11.15 - minor change: bug fix when contructing keywords list for pdf's metadata;
+2011.05.20 - SS journal url changed;
+2011.03.02 - SSY copyright fixed;
+2011.01.24 - \bdoi added;
+2010.09.07 - journal url changed for EJS journal;
+2010.08.03 - \tableofcontents fixed for the imslayout journals;
+2010.04.27 - support for the "Stochastic Systems" (ssy) added;
+2009.12.16 - \betal added
+2009.08.13 - support for the structured bibliography added (imsart-number.bst,imsart-nameyear.bst)
+             options [numbers,sort&compress] from natbib package removed
+2009.05.21 - added new option "bjps"
+2009.02.27 - all hyperref links are set to "blue"
+           - smart \MR command (code suggested by Vilmos Prokaj <prokaj@cs.elte.hu>
+2008.08.29 - supplement environment added
+2008.01.24 - for "coll" changed journal url
+2008.01.09 - added new option "coll"
+2007.12.10 - added new option "aihp"
+           - abstract have an attribute language=
+           - multiple abstracts
+           - \atltitle{} - title in another language
+2007.09.18 - fixed small error in SS (affiliation)
+2007.04.13 - fixed small error in EJS
+2007.04.02 - ISSN numbers of EJS and SS included
+2007.02.20 - support for the "Electronic Journal of Statistics" (ejs) added;
+2007.01.24 - support for the "The Annals of Applied Statistics" (aoas) and Bernoulli (bj) added;
+2006.10.13 - small bug with "lnms, ps, ss" options fixed;
+2006.09.07 - if no options specified, imsart.sty is loaded with "generic" option;
+           - new options: imslayout, stslayout
+2006.08.23 -"author's addresses" secion added to bookmarks (aap,aop,aos);
+           -completely new STS layout;
+           -\tableofcontents adjusted, could be used in frontmatter part;
+           -support for LNMS Table of Contents;
+           -support for LNMS "List of Contributors" (\contributor{Author, F.}{University});
+           -command \arxiv{math.PR/0000000} introduced to provide link to article location in arXiv
+           -\@journal{} changed to \journal@name
+           -\ead{} correctly sets the pdf link when "http://" prefix is used;
+           -\ead[...,nopdflink]{} supresses pdf link;
+           -a lot of internal changes;
+           - fix of a bug with newer hyperref versions (\orig@footnotetext)
+           -equation numbers are at left for LNMS layout;
+
+2006.03.07 -command \volumename{} introduced + small changes for LNMS option
+           (addresses will be positioned on title page)
+           -pdf document properties could be changed with commands
+            \pdftitle{}, \pdfsubject{}, \pdfauthor{}
+
+2006.01.04 support for the "Statistics Surveys" (ss) added;
+
+2005.10.19 fix of a bug with bibliography and ims layout
+           \@footnotetext is changed due to the arXiv hyperref setup
+
+2005.05.19 New options singlespacing, doublespacing, linenumbers, nolinenumbers introduced;
+           Table and figure captions changed
+
+%% End of file `imsart.sty'.

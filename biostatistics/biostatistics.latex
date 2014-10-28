@@ -1,0 +1,52 @@
+\documentclass$if(referee)$[oupdraft]$endif${bio}
+\usepackage{color}
+\usepackage{tikz}
+
+\usepackage[colorlinks=true, urlcolor=citecolor, linkcolor=citecolor, citecolor=citecolor]{hyperref}
+
+% Add history information for the article if required
+\history{Received $date$}
+
+\begin{document}
+
+% Title of paper
+\title{$title$}
+
+% List of authors, with corresponding author marked by asterisk
+\author{$for(author)$$author.name$$sep$, $endfor$\\[4pt]
+% Author addresses
+\textit{$address$}
+\\[2pt]
+% E-mail address for correspondence
+{$email$}}
+
+% Running headers of paper:
+\markboth%
+% First field is the short list of authors
+{$authhead$}
+% Second field is the short title of the paper
+{$header$}
+
+\maketitle
+
+% Add a footnote for the corresponding author if one has been
+% identified in the author list
+\footnotetext{To whom correspondence should be addressed.}
+
+\begin{abstract}
+{$abstract$}
+{$keywords$.}
+\end{abstract}
+
+$body$
+
+
+$if(natbib)$
+
+\bibliographystyle{biorefs}
+\bibliography{$bibliography$}
+
+$endif$
+
+\end{document}
+

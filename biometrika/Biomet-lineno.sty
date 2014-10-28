@@ -1,0 +1,92 @@
+\usepackage[switch,modulo]{lineno}%,mathlines
+%\runninglinenumbers %% for continous line numbering regardless of box and minipage but only on left side in single/double column
+\linenumbers %% properly in single/double column but boxes and minipage linenos not getting continuous
+
+\if@twocolumn
+\setlength\marginparwidth{.75cm}
+\setlength\marginparsep{19.5\p@}
+\else
+\setlength\marginparwidth{1.0cm}
+\setlength\marginparsep{24\p@}
+\fi
+\newcommand\linenomathWithnumbersforams{%
+  \ifLineNumbers
+  %\ifx\@@par\@@@par\else
+    \ifnum\interlinepenalty>-\linenopenaltypar
+      \global\holdinginserts\thr@@
+      \advance\interlinepenalty \linenopenalty
+     \ifhmode                                   % v4.3
+      \advance\predisplaypenalty \linenopenalty
+     \fi
+      %\advance\postdisplaypenalty \linenopenalty
+      \advance\interdisplaylinepenalty \linenopenalty
+    \fi
+  \fi
+  \ignorespaces
+  }
+
+\newcommand\linenomathWithnumbersformultline{%
+  \ifLineNumbers
+  %\ifx\@@par\@@@par\else
+    \ifnum\interlinepenalty>-\linenopenaltypar
+      \global\holdinginserts\thr@@
+      \advance\interlinepenalty \linenopenalty
+     \ifhmode                                   % v4.3
+      %\advance\predisplaypenalty \linenopenalty
+     \fi
+      %\advance\postdisplaypenalty \linenopenalty
+      \advance\interdisplaylinepenalty \linenopenalty
+    \fi
+  \fi
+  \ignorespaces
+  }
+
+
+
+\newcommand*\patchAmsMathEnvironmentForLineno[1]{%
+\expandafter\let\csname old#1\expandafter\endcsname\csname #1\endcsname
+\expandafter\let\csname oldend#1\expandafter\endcsname\csname end#1\endcsname
+\renewenvironment{#1}%
+{\def\linenomath{\linenomathWithnumbersforams}%added
+ \@namedef{linenomath*}{\linenomathNonumbers}%added
+\linenomath\csname old#1\endcsname}%
+{\csname oldend#1\endcsname\endlinenomath}}%
+\newcommand*\patchBothAmsMathEnvironmentsForLineno[1]{%
+\patchAmsMathEnvironmentForLineno{#1}%
+\patchAmsMathEnvironmentForLineno{#1*}%
+}%
+
+\AtBeginDocument{%
+\patchBothAmsMathEnvironmentsForLineno{equation}% deleted
+\patchBothAmsMathEnvironmentsForLineno{align}%
+\patchBothAmsMathEnvironmentsForLineno{flalign}%
+\patchBothAmsMathEnvironmentsForLineno{alignat}%
+\patchBothAmsMathEnvironmentsForLineno{gather}%
+\patchBothAmsMathEnvironmentsForLineno{multline}%
+%\patchBothAmsMathEnvironmentsForLineno{split}%
+\patchAmsMathEnvironmentForLineno{array}%
+%\patchAmsMathEnvironmentForLineno{split}%
+}
+
+%\renewenvironment{multline}{\linenomathWithnumbersformultline%
+%  \start@multline\st@rredfalse
+%}{%
+%  \iftagsleft@ \@xp\lendmultline@ \else \@xp\rendmultline@ \fi
+%  \ignorespacesafterend
+%\endlinenomath}
+%\renewenvironment{multline*}{\linenomathWithnumbersformultline\start@multline\st@rredtrue}{\endmultline\endlinenomath}
+
+\def\insplit@{%
+  \global\setbox\z@\vbox\bgroup
+    \Let@ \chardef\dspbrk@context\@ne \restore@math@cr
+    \default@tag % disallow use of \tag here
+    \ialign\bgroup
+      \hfil%
+      \strut@
+       $\m@th\displaystyle{##}$% 
+     &$\m@th\displaystyle{{}##}$%
+      \hfill % Why not \hfil?---dmj, 1994/12/28
+      \crcr\noalign{\global\advance\c@linenumber\@ne}%
+}
+
+\endinput

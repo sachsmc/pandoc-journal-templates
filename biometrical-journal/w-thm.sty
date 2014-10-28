@@ -1,0 +1,87 @@
+%%
+%% This is file `w-thm.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% w-thm.dtx  (with options: `package')
+%% ====================================================================
+%% @LaTeX-file{
+%%   version   = "0.9h",
+%%   date      = "2004/12/04",
+%%   author    = "WILEY-VCH Verlag GmbH \& Co. KGaA, Weinheim",
+%%   copyright = "Copyright 2002--2004 WILEY-VCH Verlag GmbH \& Co. KGaA, Weinheim,
+%%                all rights reserved.  Copying of this file is
+%%                authorized only if either:
+%%                (1) you make absolutely no changes to your copy,
+%%                including name; OR
+%%                (2) if you do make changes, you first rename it
+%%                to some other name.",
+%% }
+%% ====================================================================
+%% $Id: w-thm.dtx,v 1.15 2004/01/18 13:18:49 uwe Exp $
+%% ====================================================================
+\RequirePackage{amsthm}
+\newtheoremstyle{plain}% name
+  {\smallskipamount}%      Space above
+  {\smallskipamount}%      Space below
+  {\itshape}%         Body font
+  {\parindent}%         Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}%         Thm head font
+  {}%        Punctuation after thm head
+  {.5em}%     Space after thm head: " " = normal interword space;
+  {}%         Thm head spec (can be left empty, meaning `normal')
+\newtheoremstyle{emptythm}% name
+  {\smallskipamount}%      Space above
+  {\smallskipamount}%      Space below
+  {\itshape}%         Body font
+  {\parindent}%         Indent amount (empty = no indent, \parindent = para indent)
+  {}%         Thm head font
+  {}%        Punctuation after thm head
+  {0em}%     Space after thm head: " " = normal interword space;
+  {}%         Thm head spec (can be left empty, meaning `normal')
+\newtheoremstyle{definition}% name
+  {\smallskipamount}%      Space above
+  {\smallskipamount}%      Space below
+  {\normalfont}%         Body font
+  {\parindent}%         Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}%              Thm head font
+  {}%        Punctuation after thm head
+  {.5em}%     Space after thm head: " " = normal interword space;
+  {}%         Thm head spec (can be left empty, meaning `normal')
+\theoremstyle{plain}
+\newtheorem{theorem}{\theoremname}[section]
+\newtheorem{thm}[theorem]{\theoremname}
+\newtheorem{proposition}[theorem]{\propositionname}
+\newtheorem{prop}[theorem]{\propositionname}
+\newtheorem{lemma}[theorem]{\lemmaname}
+\newtheorem{lem}[theorem]{\lemmaname}
+\newtheorem{corollary}[theorem]{\corollaryname}
+\newtheorem{cor}[theorem]{\corollaryname}
+\newtheorem{axiom}{\axiomname}
+\newtheorem{conjecture}{\conjecturename}
+\theoremstyle{emptythm}
+\newtheorem*{varthm}{}% all text is supplied in the note
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{\definitionname}
+\newtheorem{defs}[theorem]{\definitionname}
+\newtheorem{defn}[theorem]{\definitionname}
+\newtheorem{example}[theorem]{\examplename}
+\newtheorem{remark}[theorem]{\remarkname}
+\newtheorem{rem}[theorem]{\remarkname}
+\newtheorem*{notation}{\notationname}
+\theoremstyle{plain}
+\renewenvironment{proof}[1][\proofname]{\par
+   \@ifundefined{pushQED}{}{\pushQED{\qed}}   %
+   \normalfont
+   \topsep6\p@\@plus6\p@\relax
+   \trivlist
+   \item[\hskip\labelsep\hskip\normalparindent
+         \normalfont
+     #1\@addpunct{.}]\ignorespaces
+}{%
+   \@ifundefined{popQED}{\qed\endtrivlist}{\popQED\endtrivlist\@endpefalse}
+}
+\endinput
+%%
+%% End of file `w-thm.sty'.

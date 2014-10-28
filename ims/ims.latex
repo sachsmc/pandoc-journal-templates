@@ -1,0 +1,73 @@
+% Template for the submission to:
+%   The Annals of Probability           [aop]
+%   The Annals of Applied Probability   [aap]
+%   The Annals of Statistics            [aos] 
+%   The Annals of Applied Statistics    [aoas]
+%   Stochastic Systems                  [ssy]
+%
+%Author: In this template, the places where you need to add information
+%        (or delete line) are indicated by {???}.  Mostly the information
+%        required is obvious, but some explanations are given in lines starting
+%Author:
+%All other lines should be ignored.  After editing, there should be
+%no instances of ??? after this line.
+
+% use option [preprint] to remove info line at bottom
+% journal options: aop,aap,aos,aoas,ssy
+% natbib option: authoryear
+\documentclass[aoas]{imsart}
+
+\usepackage{tikz}
+\usepackage{amsthm,amsmath}
+\usepackage[numbers]{natbib}
+\usepackage[colorlinks,citecolor=blue,urlcolor=blue]{hyperref}
+
+% provide arXiv number if available:
+%\arxiv{arXiv:0000.0000}
+
+% put your definitions there:
+\startlocaldefs
+\endlocaldefs
+
+\begin{document}
+
+\begin{frontmatter}
+
+% "Title of the paper"
+\title{$title$}
+\runtitle{$if(header)$$header$$endif$}
+
+% indicate corresponding author with \corref{}
+% \author{\fnms{John} \snm{Smith}\corref{}\ead[label=e1]{smith@foo.com}\thanksref{t1}}
+% \thankstext{t1}{Thanks to somebody} 
+% \address{line 1\\ line 2\\ printead{e1}}
+% \affiliation{Some University}
+
+$for(author)$
+\author{\fnms{$author.first$} \snm{$author.last$}\thanksref{$author.affilnum$}\ead[label=$author.ekey$]{$author.email$}}
+\address{\printead{$author.ekey$}}$sep$\and
+$endfor$
+
+\affiliation{$for(affiliation)$$affiliation.name$\thanksmark{$affiliation.key$}$sep$ and $endfor$}
+
+\runauthor{$authabbr$}
+
+\begin{abstract}
+$abstract$
+\end{abstract}
+
+\begin{keyword}[class=MSC]
+\kwd{$keywords$}
+\end{keyword}
+
+\end{frontmatter}
+
+$body$
+
+$if(natbib)$
+\bibliographystyle{imsart-number}
+\bibliography{$bibliography$}
+$endif$
+
+
+\end{document}

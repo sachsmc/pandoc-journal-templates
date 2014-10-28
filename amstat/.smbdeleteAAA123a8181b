@@ -1,0 +1,201 @@
+\documentclass[11pt]{article}
+\usepackage{hyperref}
+\usepackage[margin=35mm]{geometry}
+
+\usepackage{tikz}
+\usepackage{graphicx}
+
+\title{\bigskip \bigskip Pandoc templates for common statistics journals}
+
+%\author{true\\true}
+
+\author{\Large Michael C. Sachs\vspace{0.05in} \\ \normalsize\emph{National Cancer Institute} \\ \footnotesize \url{maito:michael.sachs@nih.gov}\vspace*{0.2in}\\  \and \Large Homer J. Simpson\vspace{0.05in} \\ \normalsize\emph{Moe's Tavern} \\ \footnotesize \url{maito:ChunkyLover53@aol.com}\vspace*{0.2in}\\ }
+
+%\author{Michael C. Sachs (National Cancer Institute) \and Homer J. Simpson (Moe's Tavern)}
+
+\date{October 2014}
+\linespread{2}
+
+\begin{document}  
+		
+\begin{titlepage}
+\maketitle
+
+
+\begin{abstract}
+
+\noindent Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce non ex
+metus. Etiam tempor nisl at lorem facilisis, vel malesuada est mollis.
+Pellentesque nunc lacus, porttitor in mollis quis, pellentesque quis
+sem. Nunc consequat, elit vel tincidunt tincidunt, urna arcu efficitur
+turpis, ac mollis turpis velit vitae libero. Aenean mauris lacus,
+blandit a nulla a, scelerisque lobortis dolor. Etiam viverra, nibh
+vehicula vehicula congue, nisl dui mattis risus, quis convallis massa
+nisi quis elit. Maecenas gravida nunc nec dignissim consequat. Fusce
+scelerisque magna ut odio ullamcorper dapibus. Vivamus et dignissim
+nunc.
+
+\smallskip
+\noindent \textbf{Keywords.} In hac; habitasse; platea; dictumst
+
+\end{abstract}
+
+\footnotetext[1]{Jerome H. Friedman is Statistician, Stanford Linear Accelerator Center,
+Stanford, CA 94305 (e-mail: jerome@stanford.edu); and Lawrence C. Rafsky
+is Statistician, ADP Network Services, Ann Arbor, MI 48106 (e-mail:
+lawrence@adp.com). This work was partially supported by Department of
+Energy Grant E82-0001002. The authors thank William S. Cleveland, Joseph
+Kruskal, John Tukey, Paul Tukey, and the referees for helpful comments.}
+\end{titlepage}
+
+
+\section{Introduction}\label{introduction}
+
+Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
+cubilia Curae; Sed porttitor massa vestibulum iaculis cursus. Donec
+sapien lorem, lobortis non gravida eu, ullamcorper sed sem. Curabitur
+nec posuere lacus. Curabitur finibus, orci in malesuada lacinia, lorem
+justo maximus risus, vitae mattis turpis elit at dolor. Vestibulum nec
+metus felis. Phasellus maximus ipsum sit amet dui egestas, at viverra
+ligula placerat. Phasellus vitae est et velit elementum fermentum vel ut
+risus. Pellentesque odio tortor, vestibulum non laoreet nec, gravida
+pretium felis. Nullam maximus tempus dapibus. Mauris nec iaculis orci.
+Integer congue, quam ac venenatis cursus, risus nunc convallis nunc,
+eget consequat arcu lorem porttitor nisl. (Heagerty, Lumley, \& Pepe,
+2000; M. S. Pepe, 2003)
+
+\subsection{Subsection}\label{subsection}
+
+Mauris augue urna, convallis ac dui eu, blandit ornare turpis.
+Vestibulum aliquam interdum ipsum, non efficitur magna varius eget.
+Suspendisse non est eu lacus eleifend dapibus. Integer placerat mollis
+risus vitae finibus. Praesent vulputate id risus et viverra. Morbi dui
+sem, ornare et odio sed, vulputate mattis nisi. Donec a iaculis lorem.
+Phasellus neque urna, blandit a feugiat at, ullamcorper non tellus. Sed
+justo est, finibus quis tortor at, lacinia ultrices ante. Cum sociis
+natoque penatibus et magnis dis parturient montes, nascetur dick butt
+ridiculus mus. In volutpat volutpat eros. Praesent orci ligula,
+tincidunt ac tellus sit amet, pellentesque volutpat ligula. Fusce sed
+elit et dolor pellentesque consequat tempor ut dolor. Pellentesque
+vitawe orfci in lorem tincidunt scelerisque a ut sapien. Mauris varius
+ornare elementum. Vivamus tincidunt eros ac consectetur tincidunt.
+(Hoerl \& Kennard, 1970; Zou \& Hastie, 2005)
+
+\section{Equations}\label{equations}
+
+Here is an equation:
+
+\[ f_{X}(x) = \left(\frac{\alpha}{\beta}\right)\left(\frac{x}{\beta}\right)^{\alpha-1}e^{-\left(\frac{x}{\beta}\right)^{\alpha}}; \alpha,\beta,x > 0 \]
+
+\subsection{Inline equations}\label{inline-equations}
+
+No problemo: \(\phi\{\alpha^\beta\}\)
+
+\section{Figures and tables}\label{figures-and-tables}
+
+Use the tikzDevice, it will blow your mind:\footnote{footnote: why not?}
+
+\begin{verbatim}
+library(knitr)
+knit_hooks$set(plot = function(x, options) {
+  if ('tikz' %in% options$dev && !options$external) {
+    hook_plot_tex(x, options)
+  } else hook_plot_md(x, options)
+})
+\end{verbatim}
+
+\subsection{Figures coming from R}\label{figures-coming-from-r}
+
+\begin{verbatim}
+## Loading required package: methods
+\end{verbatim}
+
+\begin{figure}[]
+
+\input{figure/fig1.tikz}\caption[Ut eleifend diam mauris, a semper augue blandit rhoncus]{Ut eleifend diam mauris, a semper augue blandit rhoncus.\label{fig:fig1}}
+\end{figure}
+
+Normal figure
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{figure/fig2.pdf}
+\caption{plot of chunk fig2}
+\end{figure}
+
+\clearpage
+
+\subsection{Tables coming from R}\label{tables-coming-from-r}
+
+\begin{verbatim}
+print(xtable::xtable(head(mtcars), 
+caption = "Integer at eros luctus", label = "tab1"), 
+comment = FALSE, timestamp = FALSE, caption.placement = "top")
+\end{verbatim}
+
+\begin{table}[ht]
+\centering
+\caption{Integer at eros luctus} 
+\label{tab1}
+\begin{tabular}{rrrrrrrrrrrr}
+  \hline
+ & mpg & cyl & disp & hp & drat & wt & qsec & vs & am & gear & carb \\ 
+  \hline
+Mazda RX4 & 21.00 & 6.00 & 160.00 & 110.00 & 3.90 & 2.62 & 16.46 & 0.00 & 1.00 & 4.00 & 4.00 \\ 
+  Mazda RX4 Wag & 21.00 & 6.00 & 160.00 & 110.00 & 3.90 & 2.88 & 17.02 & 0.00 & 1.00 & 4.00 & 4.00 \\ 
+  Datsun 710 & 22.80 & 4.00 & 108.00 & 93.00 & 3.85 & 2.32 & 18.61 & 1.00 & 1.00 & 4.00 & 1.00 \\ 
+  Hornet 4 Drive & 21.40 & 6.00 & 258.00 & 110.00 & 3.08 & 3.21 & 19.44 & 1.00 & 0.00 & 3.00 & 1.00 \\ 
+  Hornet Sportabout & 18.70 & 8.00 & 360.00 & 175.00 & 3.15 & 3.44 & 17.02 & 0.00 & 0.00 & 3.00 & 2.00 \\ 
+  Valiant & 18.10 & 6.00 & 225.00 & 105.00 & 2.76 & 3.46 & 20.22 & 1.00 & 0.00 & 3.00 & 1.00 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+Table \ref{tab1} shows these numbers. Some of those numbers are plotted
+in Figure \ref{fig:fig1}.
+
+\begin{verbatim}
+head(mtcars)
+\end{verbatim}
+
+\begin{verbatim}
+##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+\end{verbatim}
+
+\section{Conclusion}\label{conclusion}
+
+Cras est sapien, ornare sed nulla id, congue lobortis ante. Suspendisse
+potenti. Ut eleifend diam mauris, a semper augue blandit rhoncus.
+Quisque bibendum quam diam, non eleifend ante rhoncus et. Cras facilisis
+volutpat tortor at elementum. Cras sed elementum nisi, eget placerat
+est. Nulla congue purus lorem, nec mollis sapien varius ut. Nullam
+tortor risus, blandit eget ipsum sit amet, venenatis consectetur quam.
+Integer at eros luctus, facilisis sem sit amet, euismod massa.
+
+\section{Bibliography}\label{bibliography}
+
+\indent
+
+Heagerty, P. J., Lumley, T., \& Pepe, M. S. (2000). Time-dependent rOC
+curves for censored survival data and a diagnostic marker.
+\emph{Biometrics}, \emph{56}, 337--344.
+
+Hoerl, A. E., \& Kennard, R. W. (1970). Ridge regression: Biased
+estimation for nonorthogonal problems. \emph{Technometrics}, \emph{12},
+55--67.
+
+Pepe, M. S. (2003). \emph{The statistical evaluation of medical tests
+for classification and prediction}. Oxford University Press.
+
+Zou, H., \& Hastie, T. (2005). Regularization and variable selection via
+the elastic net. \emph{Journal of the Royal Statistical Society: Series
+B (Statistical Methodology)}, \emph{67}, 301--320.
+
+
+\end{document}

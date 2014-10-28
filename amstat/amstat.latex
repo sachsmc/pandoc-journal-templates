@@ -1,0 +1,56 @@
+\documentclass[11pt]{article}
+\usepackage{hyperref}
+\usepackage[margin=35mm]{geometry}
+
+\usepackage{tikz}
+\usepackage{graphicx}
+
+$if(title)$
+\title{\bigskip \bigskip $title$}
+$endif$ 
+
+%\author{$for(author)$$author$$sep$\\$endfor$}
+
+\author{$for(author)$\Large $author.name$\vspace{0.05in} \\ \normalsize\emph{$author.affiliation$} \\ \footnotesize \url{maito:$author.email$}\vspace*{0.2in}\\ $sep$ \and $endfor$}
+
+%\author{$for(author)$$author.name$ ($author.affiliation$)$sep$ \and $endfor$}
+
+\date{$date$}
+\linespread{1.5}
+
+\begin{document}  
+		
+\begin{titlepage}
+$if(title)$
+\maketitle
+$endif$
+
+$if(abstract)$
+
+\begin{abstract}
+
+\noindent $abstract$
+
+$if(keywords)$
+\smallskip
+\noindent \textbf{Keywords.} $keywords$
+$endif$
+
+\end{abstract}
+
+$endif$
+\footnotetext[1]{$authorfootnote$}
+\end{titlepage}
+
+
+$body$
+
+$if(biblatex)$
+
+\printbibliography$if(biblio-title)$[title=References]
+
+$endif$
+
+$endif$
+
+\end{document}

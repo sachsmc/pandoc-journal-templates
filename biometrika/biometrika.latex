@@ -1,0 +1,85 @@
+%\documentclass[manuscript]{biometrika}
+\documentclass[$if(referee)$lineno$else$manuscript$endif$]{biometrika}
+
+\usepackage{amsmath}
+
+%% Please use the following statements for
+%% managing the text and math fonts for your papers:
+\usepackage{times}
+%\usepackage[cmbold]{mathtime}
+\usepackage{bm}
+\usepackage{natbib}
+\usepackage{tikz}
+
+\usepackage[plain,noend]{algorithm2e}
+
+\makeatletter
+\renewcommand{\algocf@captiontext}[2]{#1\algocf@typo. \AlCapFnt{}#2} % text of caption
+\renewcommand{\AlTitleFnt}[1]{#1\unskip}% default definition
+\def\@algocf@capt@plain{top}
+\renewcommand{\algocf@makecaption}[2]{%
+  \addtolength{\hsize}{\algomargin}%
+  \sbox\@tempboxa{\algocf@captiontext{#1}{#2}}%
+  \ifdim\wd\@tempboxa >\hsize%     % if caption is longer than a line
+    \hskip .5\algomargin%
+    \parbox[t]{\hsize}{\algocf@captiontext{#1}{#2}}% then caption is not centered
+  \else%
+    \global\@minipagefalse%
+    \hbox to\hsize{\box\@tempboxa}% else caption is centered
+  \fi%
+  \addtolength{\hsize}{-\algomargin}%
+}
+\makeatother
+
+%%% User-defined macros should be placed here, but keep them to a minimum.
+\def\Bka{{\it Biometrika}}
+\def\AIC{\textsc{aic}}
+\def\T{{ \mathrm{\scriptscriptstyle T} }}
+\def\v{{\varepsilon}}
+
+\begin{document}
+
+\jname{Biometrika}
+%% The year, volume, and number are determined on publication
+\jyear{$year$}
+\jvol{99}
+\jnum{1}
+%% The \doi{...} and \accessdate commands are used by the production team
+%\doi{10.1093/biomet/asm023}
+\accessdate{Advance Access publication on 31 July 2012}
+\copyrightinfo{\Copyright\ 2012 Biometrika Trust\goodbreak {\em Printed in Great Britain}}
+
+%% These dates are usually set by the production team
+\received{April 2012}
+\revised{September 2012}
+
+%% The left and right page headers are defined here:
+\markboth{$authabbr$}{$header$}
+
+%% Here are the title, author names and addresses
+\title{$title$}
+
+$for(author)$
+\author{$author.name$}
+\affil{$author.affil$ \email{$author.email$}}$sep$ 
+
+$endfor$
+
+\maketitle
+
+\begin{abstract}
+$abstract$
+\end{abstract}
+
+\begin{keywords}
+$keywords$.
+\end{keywords}
+
+$body$
+
+$if(natbib)$
+\bibliographystyle{biometrika}
+\bibliography{$bibliography$}
+$endif$
+
+\end{document}
