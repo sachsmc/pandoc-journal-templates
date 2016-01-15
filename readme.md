@@ -31,6 +31,7 @@ Folder name | Journal(s) | Link to style guide
 `ims` | AOAS, AOP, AAP, AOS, SSY | [ims](http://www.e-publications.org/ims/support/ims-instructions.html)
 `jss` | Journal of Statistical Software | [jss](http://www.jstatsoft.org/style)
 `stats-in-med` | Statistics in Medicine | [statmed](http://onlinelibrary.wiley.com/journal/10.1002/(ISSN)1097-0258/homepage/ForAuthors.html)
+`rjournal` | The R Journal | [rjournal](https://journal.r-project.org/submissions.html)
 
 ### Using the template
 Copy the entire contents of the appropriate folder to your paper's working directory. If you are working on a paper called `mypaper` and it is located in `~/Papers/October/` and you want to submit to Biostatistics, then copy the contents of the `biostatistics` folder to `~/Papers/October/`. The folders contain everything necessary to compile a markdown document into the correct Latex format. 
