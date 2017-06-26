@@ -1,9 +1,9 @@
-#Pandoc templates for the major statistics journals
+# Pandoc templates for the major statistics journals
 
-##About
+## About
 Write your statistics and biostatistics in markdown so that you can focus on the content, not the formatting. These templates use pandoc to convert the markdown into latex, and then the appropriate journal template is applied. Work on the content and these templates will get you 99\% of the way to submission. Need to submit to a different journal later? No problem, just apply a different template. This is my effort to rid the statistics world of the need to wrestle with latex for a journal submission. 
 
-##Usage
+## Usage
 
 ### Dependencies
 
@@ -81,6 +81,6 @@ make example.pdf example.tex
 
 You may need to edit the tex by hand, but these templates will get you 99\% of the way to submission. 
 
-##License
+## License
 These materials are public domain and made available with a [Creative Commons CC0 1.0 Universal](http://creativecommons.org/publicdomain/zero/1.0/legalcode) dedication. In short, I waive all rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law. You can copy, modify, distribute, and perform the work, even for commercial purposes, all without asking permission. I make no warranties about the work, and disclaim liability for all uses of the work, to the fullest extent permitted by applicable law.
 
